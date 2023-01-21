@@ -12,7 +12,10 @@ import Team4450.Lib.MonitorCompressor;
 import Team4450.Lib.MonitorPDP;
 import Team4450.Lib.NavX;
 import Team4450.Lib.Util;
+import Team4450.Robot23.commands.DriveCommand;
+import Team4450.Robot23.commands.SetToStartPositionCommand;
 import Team4450.Robot23.commands.Utility.NotifierCommand;
+import Team4450.Robot23.subsystems.DriveBase;
 import Team4450.Robot23.subsystems.ShuffleBoard;
 
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -42,7 +45,7 @@ public class RobotContainer
 	// Subsystems.
 
 	public static ShuffleBoard	shuffleBoard;
-	//public static DriveBase 	driveBase;
+	public static DriveBase 	driveBase;
 
 	// Subsystem Default Commands.
 
@@ -145,6 +148,7 @@ public class RobotContainer
 		// Invert driving joy sticks Y axis so + values mean forward.
 	  
 		driverPad.invertY(true);
+		driverPad.invertX(true);
 		
 		// Set climber joystick dead zone to reduce twitchyness.
 	
@@ -153,12 +157,11 @@ public class RobotContainer
 		// Create subsystems prior to button mapping.
 
 		shuffleBoard = new ShuffleBoard();
-		//driveBase = new DriveBase();
+		driveBase = new DriveBase();
 
 		// Create any persistent commands.
 
-		// Set subsystem Default commands.
-		
+		// Set any subsystem Default commands.
 
 		// Set the default drive command. This command will be scheduled automatically to run
 		// every teleop period and so use the gamepad joy sticks to drive the robot. We pass the GetY()
@@ -171,9 +174,23 @@ public class RobotContainer
 		// Second is using the convenience method getRightYDS() which returns getRightY() as a DoubleSupplier. 
 		// We show both ways here as an example.
 
-        //driveBase.setDefaultCommand(driveCommand = new TankDrive(driveBase, () -> driverPad.getLeftY(),
-		//																	driverPad.getRightYDS()));
-		   
+		// The controls are for field-oriented driving:
+		// Left stick Y axis -> forward and backwards movement (throttle)
+		// Left stick X axis -> left and right movement (strafe)
+		// Right stick X axis -> rotation
+		// Note: X and Y axis on stick is opposite X and Y axis on the WheelSpeeds object.
+		// Wheelspeeds X axis is + down the field away from alliance wall. +Y axis is left
+		// when standing at alliance wall looking down the field.
+		// This is handled here by swapping the inputs. Note that first axis parameter below
+		// is the X wheelspeeds input and the second is Y wheelspeeds input.
+
+		driveBase.setDefaultCommand(new DriveCommand(
+				driveBase,
+				() -> driverPad.getRightY() + driverPad.getLeftY(), // test throttle on both sticks.
+				() -> driverPad.getRightX(),
+				driverPad.getLeftXDS(),
+				driverPad));
+
 		// Start the compressor, PDP and camera feed monitoring Tasks.
 
    		// monitorCompressorThread = MonitorCompressor.getInstance(pressureSensor);
@@ -237,8 +254,17 @@ public class RobotContainer
 		// Advance DS tab display.
 		new Trigger(() -> driverPad.getPOVAngle(90))
 			.onTrue(new InstantCommand(shuffleBoard::switchTab));
- 
+        
+		// Set wheels to starting position.
+		new Trigger(() -> driverPad.getStartButton())
+			.onTrue(new SetToStartPositionCommand(driveBase));
+
+	    // Back button toggles field/robot oriented driving mode.
+    	new Trigger(() -> driverPad.getBackButton())
+        	.onTrue(new InstantCommand(driveBase::toggleFieldOriented));
+	 
 		// -------- Utility pad buttons ----------
+		// What follows is an example from 2022 robot:
 		// Toggle extend Pickup.
 		// So we show 3 ways to control the pickup. A regular command that toggles pickup state,
 		// an instant command that calls a method on Pickup class that toggles state and finally

@@ -35,7 +35,7 @@ public class Robot extends TimedRobot
   public void robotInit() 
   {
     try {
-      robot = this;
+      robot = this;   // Stored in Constants.
 
       LCD.clearAll();
       LCD.printLine(LCD_1, "Mode: RobotInit");
