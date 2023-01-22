@@ -119,8 +119,9 @@ public class DriveBase extends SubsystemBase
 
     new Thread(() -> {
       try {
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         zeroGyro();
+        //m_navx.reset();
       } catch (Exception e) { }
     }).start();
 
@@ -315,10 +316,10 @@ public class DriveBase extends SubsystemBase
         ? ChassisSpeeds.fromFieldRelativeSpeeds(throttle, strafe, rotation, getHeadingRotation2d())
         : new ChassisSpeeds(throttle, strafe, rotation);
 
-    LCD.printLine(4, "max vel=%.3fms  max ang vel=%.3frs  voltage=%.1f",
-        MAX_VELOCITY_METERS_PER_SECOND,
-        MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
-        MAX_VOLTAGE);
+    //LCD.printLine(4, "max vel=%.3fms  max ang vel=%.3frs  voltage=%.1f",
+    //    MAX_VELOCITY_METERS_PER_SECOND,
+    //    MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+    //    MAX_VOLTAGE);
 
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
     

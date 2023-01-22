@@ -53,62 +53,12 @@ public class ShuffleBoard extends SubsystemBase
     public void updateDS()
 	{    
         if (tracing) FunctionTracer.INSTANCE.enterFunction("ShuffleBoard.updateDS");
-
-        // LCD.printLine(LCD_3, "leftenc=%d  rightenc=%d", 
-        //               RobotContainer.driveBase.getLeftEncoder(), 
-        //               RobotContainer.driveBase.getRightEncoder());			
-                
-        // LCD.printLine(LCD_4, "utilRY=%.3f  utilRX=%.3f  climberEnc=%d  climbswitch=%b",
-        //               RobotContainer.utilityPad.getRightYDS().getAsDouble(), 
-        //               RobotContainer.utilityPad.getRightX(), 
-        //               RobotContainer.climber.encoderGet(), 
-        //               RobotContainer.climber.getSwitch());
-    
-        // LCD.printLine(LCD_7, "Lrpm=%d - Rrpm=%d  Lmax vel=%.3f - Rmax vel=%.3f", 
-        //               RobotContainer.driveBase.leftEncoder.getRPM(),
-        //               RobotContainer.driveBase.rightEncoder.getRPM(), 
-        //               RobotContainer.driveBase.leftEncoder.getMaxVelocity(PIDRateType.velocityMPS),
-        //               RobotContainer.driveBase.rightEncoder.getMaxVelocity(PIDRateType.velocityMPS));
       
-        //Pose2d pose = RobotContainer.driveBase.getOdometerPose();
+        Pose2d pose = RobotContainer.driveBase.getPoseMeters();
       
-        //LCD.printLine(LCD_8, "pose x=%.1fm (lrot=%.2f)  y=%.1fm  deg=%.1f  yaw=%.1f", pose.getX(), 
-        //              RobotContainer.driveBase.leftEncoder.getRotations(), pose.getY(), pose.getRotation().getDegrees(),
-        //              RobotContainer.navx.getYaw());
-                      
-        //LCD.printLine(LCD_9, "shooter rpm=%.0f  max=%.0f  ball switch=%b  ball eye=%d", RobotContainer.shooter.getRPM(), 
-        //              RobotContainer.shooter.getMaxRPM(), RobotContainer.channel.getBallStopSwitch(), 
-        //              RobotContainer.channel.getBallStartSensor());  
-
-        // LCD.printLine(LCD_10, "yaw=%.1f tyaw=%.1f tyaw180=%.1f tangle=%.1f hdg=%.1f",
-        //               RobotContainer.navx.getYaw(), RobotContainer.navx.getTotalYaw(), RobotContainer.navx.getTotalYaw180(),
-        //               RobotContainer.navx.getTotalAngle(), RobotContainer.navx.getHeading());
-
-        // LCD.printLine(LCD_10, "ltt=%d  labspos=%d  ldeg=%.1f  rtt=%d  rabspos=%d  rdeg=%.1f",
-        //               RobotContainer.driveBase.leftEncoder.getTotalTicks(),
-        //               RobotContainer.driveBase.leftEncoder.getAbsolutePosition(),
-        //               SRXMagneticEncoderRelative.ticksToDegrees(RobotContainer.driveBase.leftEncoder.getAbsolutePosition()),
-        //               RobotContainer.driveBase.rightEncoder.getTotalTicks(),
-        //               RobotContainer.driveBase.rightEncoder.getAbsolutePosition(),
-        //               RobotContainer.driveBase.rightEncoder.getAbsolutePositionDeg());
-
-        // Required to seed getMaxVelocity calls.
-        //RobotContainer.canCoder.getRPM();
-        //RobotContainer.driveBase.leftEncoder.getRPM();
-
-        // LCD.printLine(LCD_10, "ccpos=%d ccabspos=%d ccdeg=%.1f ccmax=%.1f  lpos=%d labspos=%d ldeg=%.1f lmax=%.1f",
-        //               RobotContainer.canCoder.get(),
-        //               RobotContainer.canCoder.getAbsolutePosition(),
-        //               RobotContainer.canCoder.getAbsolutePositionDeg(),
-        //               RobotContainer.canCoder.getMaxVelocity(CANCoder.PIDRateType.velocityMPS),
-        //               RobotContainer.driveBase.leftEncoder.get(),
-        //               RobotContainer.driveBase.leftEncoder.getAbsolutePosition(),
-        //               RobotContainer.driveBase.leftEncoder.getAbsolutePositionDeg(),
-        //               RobotContainer.driveBase.leftEncoder.getMaxVelocity(PIDRateType.velocityMPS));
-        
-        //LCD.printLine(LCD_10, "shooter abspos=%d  deg=%.1f", RobotContainer.shooter.encoder.getAbsolutePosition(),
-        //              RobotContainer.shooter.encoder.getAbsolutePositionDeg());
-    
+        LCD.printLine(LCD_4, "pose x=%.1fm  y=%.1fm  deg=%.1f  yaw=%.1f", pose.getX(), 
+                      pose.getY(), pose.getRotation().getDegrees(), RobotContainer.navx.getYaw());
+                          
         if (tracing) FunctionTracer.INSTANCE.exitFunction("ShuffleBoard.updateDS");
     }
 
@@ -135,7 +85,7 @@ public class ShuffleBoard extends SubsystemBase
         SmartDashboard.putBoolean("AltDriveMode", false);
         SmartDashboard.putBoolean("SteeringAssist", false);
         SmartDashboard.putBoolean("Brake", false);
-        //SmartDashboard.putBoolean("TargetLocked", false);
+        SmartDashboard.putBoolean("TargetLocked", false);
     }
 
     /**

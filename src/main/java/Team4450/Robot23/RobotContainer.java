@@ -76,7 +76,8 @@ public class RobotContainer
 
 	//private AnalogInput			pressureSensor = new AnalogInput(PRESSURE_SENSOR);
 	  
-	private PowerDistribution	pdp = new PowerDistribution(0, PowerDistribution.ModuleType.kCTRE);
+	//private PowerDistribution	pdp = new PowerDistribution(0, PowerDistribution.ModuleType.kCTRE);
+	private PowerDistribution	pdp = new PowerDistribution(20, PowerDistribution.ModuleType.kRev);
 
 	// PneumaticsControlModule class controls the PCM. New for 2022.
 	//private PneumaticsControlModule	pcm = new PneumaticsControlModule(COMPRESSOR);
@@ -146,6 +147,7 @@ public class RobotContainer
 		SmartDashboard.putData("Gyro2", navx);
 
 		// Invert driving joy sticks Y axis so + values mean forward.
+		// Invert driving joy sticks X axis so + values mean right.
 	  
 		driverPad.invertY(true);
 		driverPad.invertX(true);

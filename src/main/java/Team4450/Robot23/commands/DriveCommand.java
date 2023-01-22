@@ -64,10 +64,10 @@ public class DriveCommand extends CommandBase
 
         double throttle = deadband(throttleSupplier.getAsDouble(), THROTTLE_DEADBAND);
         double strafe = deadband(strafeSupplier.getAsDouble(), THROTTLE_DEADBAND);
-        double rotation = -deadband(rotationSupplier.getAsDouble(), ROTATION_DEADBAND);
+        double rotation = deadband(rotationSupplier.getAsDouble(), ROTATION_DEADBAND);
 
         // Have to invert for sim...not sure why.
-        //if (RobotBase.isSimulation()) rotation *= -1;
+        if (RobotBase.isSimulation()) rotation *= -1;
 
         // Both squaring inputs and slew rate limiters are ways to slow down
         // or smooth response to the joystick inputs. Will test both methods.
