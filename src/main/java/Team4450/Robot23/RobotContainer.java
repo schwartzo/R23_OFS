@@ -77,7 +77,7 @@ public class RobotContainer
 	//private AnalogInput			pressureSensor = new AnalogInput(PRESSURE_SENSOR);
 	  
 	//private PowerDistribution	pdp = new PowerDistribution(0, PowerDistribution.ModuleType.kCTRE);
-	private PowerDistribution	pdp = new PowerDistribution(20, PowerDistribution.ModuleType.kRev);
+	private PowerDistribution	pdp = new PowerDistribution(REV_PDB, PowerDistribution.ModuleType.kRev);
 
 	// PneumaticsControlModule class controls the PCM. New for 2022.
 	//private PneumaticsControlModule	pcm = new PneumaticsControlModule(COMPRESSOR);
@@ -138,7 +138,10 @@ public class RobotContainer
 		// Create NavX object here since must done before CameraFeed is created (don't remember why).
         // Navx calibrates at power on and must complete before robot moves. Takes ~1 second for 2nd
         // generation Navx ~15 seconds for classic Navx. We assume there will be enough time between
-        // power on and our first movement because normally things don't happen that fast.
+        // power on and our first movement because normally things don't happen that fast
+
+		// Warning: The navx instance is shared with the swerve drive code. Resetting or otherwise
+		// manipulating the navx (as opposed to just reading data) may crash the swerve drive code.
 
 		navx = NavX.getInstance(NavX.PortType.SPI);
 
@@ -150,12 +153,8 @@ public class RobotContainer
 		// Invert driving joy sticks X axis so + values mean right.
 	  
 		driverPad.invertY(true);
-		driverPad.invertX(true);
-		
-		// Set climber joystick dead zone to reduce twitchyness.
+		driverPad.invertX(true);		
 	
-		utilityPad.deadZone(.50);
-
 		// Create subsystems prior to button mapping.
 
 		shuffleBoard = new ShuffleBoard();
@@ -264,6 +263,16 @@ public class RobotContainer
 	    // Back button toggles field/robot oriented driving mode.
     	new Trigger(() -> driverPad.getBackButton())
         	.onTrue(new InstantCommand(driveBase::toggleFieldOriented));
+		
+		// Toggle camera feeds. 
+		new Trigger(() -> driverPad.getLeftBumper())
+    		.onTrue(new InstantCommand(cameraFeed::ChangeCamera));
+
+		new Trigger(() -> driverPad.getAButton())
+    		.onTrue(new InstantCommand(driveBase::resetYaw));
+
+		new Trigger(() -> driverPad.getBButton())
+    		.onTrue(new InstantCommand(driveBase::resetDistanceTraveled));
 	 
 		// -------- Utility pad buttons ----------
 		// What follows is an example from 2022 robot:
@@ -288,10 +297,6 @@ public class RobotContainer
 			//.onTrue(new InstantCommand(pickup::toggleDeploy, pickup));
 		//	.onTrue(new NotifierCommand(pickup::toggleDeploy, 0.0, "DeployPickup", pickup));
 
-		
-		// Toggle camera feeds. 
-		new Trigger(() -> driverPad.getLeftBumper())
-    		.onTrue(new InstantCommand(cameraFeed::ChangeCamera));
 	}
 
 	/**

@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "ORF23-01.21.23-1";
+	public static String		PROGRAM_NAME = "ORF23-01.23.23-1";
 
 	public static Robot			robot;
 
@@ -31,6 +31,8 @@ public final class Constants
 	public static String					eventName, gameMessage;
 	    
 	// Non-drive base motor controller port assignments
+
+    public static int           REV_PDB = 20;
 	
 	// GamePad port assignments.
 	public static final int		DRIVER_PAD = 0, UTILITY_PAD = 1;

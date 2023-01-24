@@ -10,7 +10,6 @@ import Team4450.Lib.Swerve.SdsModuleConfigurations;
 import Team4450.Lib.Swerve.SwerveModule;
 import Team4450.Lib.Swerve.ModuleConfiguration.ModulePosition;
 import Team4450.Robot23.RobotContainer;
-import Team4450.Lib.LCD;
 import Team4450.Lib.Util;
 
 import edu.wpi.first.hal.SimDouble;
@@ -31,13 +30,13 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.SPI;
-
 import static Team4450.Robot23.Constants.*;
 
 public class DriveBase extends SubsystemBase 
 {
   private boolean       autoReturnToZero = false, fieldOriented = true;
+  private double        distanceTraveled, lastDistanceTraveled;
+  private double        yawAngle, lastYawAngle;
 
   private SimDouble     simAngle; // navx sim.
 
@@ -238,7 +237,7 @@ public class DriveBase extends SubsystemBase
   }
 
   /**
-   * Sets the gyroscope angle to zero. This can be used to set the direction 
+   * Sets the gyroscope yaw angle to zero. This can be used to set the direction 
    * the robot is currently facing to the 'forwards' direction.
    */
   public void zeroGyro() 
@@ -285,7 +284,7 @@ public class DriveBase extends SubsystemBase
 
   /**
    * Get heading in radians.
-   * @return Heading in radians.
+   * @return Heading as rotation2d (radians).
    */
   public Rotation2d getHeadingRotation2d() 
   {
@@ -360,7 +359,7 @@ public class DriveBase extends SubsystemBase
   {    
     updateOdometry();
 
-    field2d.setRobotPose(getPoseMeters());
+    field2d.setRobotPose(getRobotPose());
 
     setField2dModulePoses();
   }
@@ -377,6 +376,25 @@ public class DriveBase extends SubsystemBase
     modulePositions[3] = m_backRightModule.getFieldPosition();
     
     m_odometry.update(getHeadingRotation2d(), modulePositions);
+
+    // Track the distance traveled by robot to support simulation of
+    // a regular encoder. We average 2 of the wheels in case of slip.
+
+    double currentDistance = (modulePositions[0].distanceMeters + modulePositions[3].distanceMeters) / 2;
+
+    distanceTraveled += currentDistance - lastDistanceTraveled;
+
+    lastDistanceTraveled = currentDistance;
+
+    SmartDashboard.putNumber("Distance Traveled(m)", distanceTraveled);
+    
+    // Track gyro yaw to support simulation of resettable yaw.
+
+    yawAngle += m_navx.getAngle() - lastYawAngle;
+
+    lastYawAngle = m_navx.getAngle();
+
+    SmartDashboard.putNumber("Yaw Angle", yawAngle);
 
     // Now update the pose of each wheel (module).
     updateModulePose(m_frontLeftModule);
@@ -395,8 +413,8 @@ public class DriveBase extends SubsystemBase
   {
     Translation2d modulePosition = module.getTranslation2d()
         //.rotateBy(getHeadingRotation2d())
-        .rotateBy(getPoseMeters().getRotation())
-        .plus(getPoseMeters().getTranslation());
+        .rotateBy(getRobotPose().getRotation())
+        .plus(getRobotPose().getTranslation());
     
     module.setModulePose(
         new Pose2d(modulePosition, module.getHeadingRotation2d().plus(getHeadingRotation2d())));
@@ -421,9 +439,10 @@ public class DriveBase extends SubsystemBase
   /**
    * Returns the estimated position of the robot on the field
    * as determined by the odometry tracking object.
-   * @return Position on the field and direction robot is pointing.
+   * @return Position on the field and direction robot is pointing. X, Y 
+   * in meters, rotation as a rotation2D.
    */
-  public Pose2d getPoseMeters() 
+  public Pose2d getRobotPose() 
   {
     return m_odometry.getEstimatedPosition();
   }
@@ -465,7 +484,7 @@ public class DriveBase extends SubsystemBase
   @Override
   public void simulationPeriodic() 
   {
-    // We are not using this now because the REV simulation does not work
+    // We are not using this call now because the REV simulation does not work
     // correctly. Will leave the code in place in case this issue gets fixed.
     // Assumes Neos. SIM for 500s not implemented.
     //if (robot.isEnabled()) REVPhysicsSim.getInstance().run();
@@ -539,7 +558,9 @@ public class DriveBase extends SubsystemBase
   }
 
   /**
-   * Set modules driving and steering encoders to zero.
+   * Set modules driving and steering encoders to zero. Should only be called
+   * at initialization. Do not call after driving starts as it will crash the
+   * swerve driving code.
    */
   public void resetModuleEncoders() 
   {
@@ -551,6 +572,9 @@ public class DriveBase extends SubsystemBase
       m_backRightModule.resetMotorEncoders(); 
   }
   
+  /**
+   * Not currently used.
+   */
   public void setModulesToAbsolute() 
   {
       Util.consoleLog();
@@ -564,6 +588,7 @@ public class DriveBase extends SubsystemBase
   /**
    * Set modules to point "forward". This is same as joystick
    * to neutral position with auto return to zero set true.
+   * TODO: Not currently working.
    */
   public void setModulesToForward()
   {
@@ -595,5 +620,42 @@ public class DriveBase extends SubsystemBase
     m_backRightModule.setStartingPosition();
 
     m_navx.reset(); // or zeroGyro();
+  }
+
+  /**
+   * Gets the distance traveled by the robot drive wheels since the
+   * last call to resetDistanceTraveled. This simulates a regular
+   * encoder on the drive wheel. We can't use the actual wheel encoder
+   * because resetting that encoder would crash the swerve drive code.
+   * Note: This distance is only accurate for forward/backward and
+   * strafe moves. 
+   * @return
+   */
+  public double getDistanceTraveled()
+  {
+    return distanceTraveled;
+  }
+
+  /**
+   * Reset the distance traveled by the robot.
+   */
+  public void resetDistanceTraveled()
+  {
+    distanceTraveled = 0;
+  }
+
+  /**
+   * Returns the current yaw angle of the robot measured from the last
+   * call to resetYaw().
+   * @return The yaw angle.
+   */
+  public double getYaw()
+  {
+    return yawAngle;
+  }
+
+  public void resetYaw()
+  {
+    yawAngle = 0;
   }
 }

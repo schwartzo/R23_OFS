@@ -45,6 +45,9 @@
         "open": true
       },
       "SmartDashboard": {
+        "Gyro2": {
+          "open": true
+        },
         "Version": {
           "open": true
         },
