@@ -15,6 +15,7 @@ import Team4450.Lib.Util;
 import Team4450.Robot23.commands.DriveCommand;
 import Team4450.Robot23.commands.SetToStartPositionCommand;
 import Team4450.Robot23.commands.Utility.NotifierCommand;
+import Team4450.Robot23.commands.autonomous.TestAuto1;
 import Team4450.Robot23.subsystems.DriveBase;
 import Team4450.Robot23.subsystems.ShuffleBoard;
 
@@ -96,7 +97,8 @@ public class RobotContainer
     // and setAutoChoices() which appear later in this class.
 	private enum AutoProgram
 	{
-		NoProgram
+		NoProgram,
+		TestAuto1
 	}
 
 	// Classes to access drop down lists on Driver Station.
@@ -327,13 +329,9 @@ public class RobotContainer
 				autoCommand = null;
 				break;
  				
-			// case DriveOut:
-			// 	autoCommand = new DriveOut(driveBase, startingPose);
-			// 	break;
- 				
-			// case ShootFirst:
-			// 	autoCommand = new ShootFirst(driveBase, shooter, channel, startingPose);
-			// 	break;
+			case TestAuto1:
+			 	autoCommand = new TestAuto1(driveBase, startingPose);
+			 	break;
 		}
         
 		return autoCommand;
@@ -349,9 +347,9 @@ public class RobotContainer
 		autoChooser = new SendableChooser<AutoProgram>();
 		
 		SendableRegistry.add(autoChooser, "Auto Program");
-		autoChooser.setDefaultOption("No Program", AutoProgram.NoProgram);
-		//autoChooser.addOption("Drive Out", AutoProgram.DriveOut);		
-		//autoChooser.addOption("Shoot First", AutoProgram.ShootFirst);		
+		//autoChooser.setDefaultOption("No Program", AutoProgram.NoProgram);
+		//autoChooser.addOption("Test Auto 1", AutoProgram.TestAuto1);		
+		autoChooser.setDefaultOption("Test Auto 1", AutoProgram.TestAuto1);		
 				
 		SmartDashboard.putData(autoChooser);
 	}

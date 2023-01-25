@@ -6,6 +6,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.REVPhysicsSim;
 
 import Team4450.Lib.Swerve.Mk4iSwerveModuleHelper;
+import Team4450.Lib.Swerve.ModuleConfiguration;
 import Team4450.Lib.Swerve.SdsModuleConfigurations;
 import Team4450.Lib.Swerve.SwerveModule;
 import Team4450.Lib.Swerve.ModuleConfiguration.ModulePosition;
@@ -18,6 +19,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -32,11 +34,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.RobotBase;
 import static Team4450.Robot23.Constants.*;
 
+import org.ejml.dense.row.misc.TransposeAlgs_DDRM;
+
 public class DriveBase extends SubsystemBase 
 {
   private boolean       autoReturnToZero = false, fieldOriented = true;
   private double        distanceTraveled, lastDistanceTraveled;
   private double        yawAngle, lastYawAngle;
+  private Pose2d        lastPose;
 
   private SimDouble     simAngle; // navx sim.
 
@@ -162,8 +167,8 @@ public class DriveBase extends SubsystemBase
     m_frontLeftModule = Mk4iSwerveModuleHelper.createNeo(
             ModulePosition.FL,
             // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
-            tab.getLayout("Front Left Module", BuiltInLayouts.kList)
-                    .withSize(2, 4)
+            tab.getLayout("Front Left Module", BuiltInLayouts.kGrid)
+                    .withSize(1, ModuleConfiguration.shuffleBoardRows) // 2,
                     .withPosition(0, 0),
             // This can either be STANDARD or FAST depending on your gear configuration
             Mk4iSwerveModuleHelper.GearRatio.L1,
@@ -184,9 +189,9 @@ public class DriveBase extends SubsystemBase
 
     m_frontRightModule = Mk4iSwerveModuleHelper.createNeo(
             ModulePosition.FR,
-            tab.getLayout("Front Right Module", BuiltInLayouts.kList)
-                    .withSize(2, 4)
-                    .withPosition(2, 0),
+            tab.getLayout("Front Right Module", BuiltInLayouts.kGrid)
+                    .withSize(1, ModuleConfiguration.shuffleBoardRows)
+                    .withPosition(1, 0), // 2, 0
             Mk4iSwerveModuleHelper.GearRatio.L1,
             FRONT_RIGHT_MODULE_DRIVE_MOTOR,
             FRONT_RIGHT_MODULE_STEER_MOTOR,
@@ -198,9 +203,9 @@ public class DriveBase extends SubsystemBase
     
     m_backLeftModule = Mk4iSwerveModuleHelper.createNeo(
             ModulePosition.BL,
-            tab.getLayout("Back Left Module", BuiltInLayouts.kList)
-                    .withSize(2, 4)
-                    .withPosition(4, 0),
+            tab.getLayout("Back Left Module", BuiltInLayouts.kGrid)
+                    .withSize(1, ModuleConfiguration.shuffleBoardRows) // 2,4
+                    .withPosition(2, 0),  // 4, 0
             Mk4iSwerveModuleHelper.GearRatio.L1,
             BACK_LEFT_MODULE_DRIVE_MOTOR,
             BACK_LEFT_MODULE_STEER_MOTOR,
@@ -212,9 +217,9 @@ public class DriveBase extends SubsystemBase
 
     m_backRightModule = Mk4iSwerveModuleHelper.createNeo(
             ModulePosition.BR,
-            tab.getLayout("Back Right Module", BuiltInLayouts.kList)
-                    .withSize(2, 4)
-                    .withPosition(6, 0),
+            tab.getLayout("Back Right Module", BuiltInLayouts.kGrid)
+                    .withSize(1, ModuleConfiguration.shuffleBoardRows) // 2,4
+                    .withPosition(3, 0),  // 6,0
             Mk4iSwerveModuleHelper.GearRatio.L1,
             BACK_RIGHT_MODULE_DRIVE_MOTOR,
             BACK_RIGHT_MODULE_STEER_MOTOR,
@@ -224,13 +229,13 @@ public class DriveBase extends SubsystemBase
 
     m_backRightModule.setTranslation2d(new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0));
     
+    // Encoders to zero.
     resetModuleEncoders();
-    //setModulesToAbsolute();
 
     // Set starting position on field.
     setOdometry(DEFAULT_STARTING_POSE);
 
-    // Initialze drive by issuing a no movement drive command.
+    // Initialze drive code by issuing a no movement drive command.
     drive(0, 0, 0);
     
     updateDS();
@@ -378,13 +383,23 @@ public class DriveBase extends SubsystemBase
     m_odometry.update(getHeadingRotation2d(), modulePositions);
 
     // Track the distance traveled by robot to support simulation of
-    // a regular encoder. We average 2 of the wheels in case of slip.
+    // a regular encoder. We do this by looking at the change in robot
+    // pose and using the change in X,Y to compute the change in distance
+    // traveled and tracking that. NOTE: This currently only works for
+    // movements only in the X or Y direction. It will not be correct
+    // for diagonal moves. It also does not track rotations as distance
+    // traveled as technically a rotation is not moving a distance. This
+    // is all a kludge to support the simple autonomus functions.
 
-    double currentDistance = (modulePositions[0].distanceMeters + modulePositions[3].distanceMeters) / 2;
+    Pose2d currentPose = m_odometry.getEstimatedPosition();
 
-    distanceTraveled += currentDistance - lastDistanceTraveled;
+    Transform2d poseOffset = currentPose.minus(lastPose);
+    
+    lastPose = currentPose;
+    
+    double currentDistance = poseOffset.getX() + poseOffset.getY();
 
-    lastDistanceTraveled = currentDistance;
+    distanceTraveled += currentDistance;
 
     SmartDashboard.putNumber("Distance Traveled(m)", distanceTraveled);
     
@@ -474,6 +489,8 @@ public class DriveBase extends SubsystemBase
     // pose angle, but this may not be the correct way to do this now that
     // odometry is using position instead of velocity (as of 2023).
     m_odometry.resetPosition(pose.getRotation(), modulePositions, pose);
+
+    lastPose = pose;
 
     m_navx.reset();
   }  
@@ -646,14 +663,27 @@ public class DriveBase extends SubsystemBase
 
   /**
    * Returns the current yaw angle of the robot measured from the last
-   * call to resetYaw().
-   * @return The yaw angle.
+   * call to resetYaw(). Angle sign is WPILib/Navx convention.
+   * @return The yaw angle. + is right (cw) - is left (ccw).
    */
   public double getYaw()
   {
     return yawAngle;
   }
 
+  /**
+   * Returns the current yaw angle of the robot measured from the last
+   * call to resetYaw(). Angle sign is radians convention.
+   * @return The yaw angle in radians.
+   */
+  public double getYawR()
+  {
+    return Math.toRadians(yawAngle);
+  }
+
+  /**
+   * Set yaw angle to zero.
+   */
   public void resetYaw()
   {
     yawAngle = 0;

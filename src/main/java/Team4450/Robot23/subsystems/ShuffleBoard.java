@@ -86,6 +86,7 @@ public class ShuffleBoard extends SubsystemBase
         SmartDashboard.putBoolean("SteeringAssist", false);
         SmartDashboard.putBoolean("Brake", false);
         SmartDashboard.putBoolean("TargetLocked", false);
+        //SmartDashboard.putBoolean("Autonomous Active", false);
     }
 
     /**

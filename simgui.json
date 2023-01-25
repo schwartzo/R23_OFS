@@ -11,6 +11,11 @@
       "/SmartDashboard/Start Position": "String Chooser"
     },
     "windows": {
+      "/SmartDashboard/Auto Program": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Field2d": {
         "Robot": {
           "length": 0.4749999940395355,
