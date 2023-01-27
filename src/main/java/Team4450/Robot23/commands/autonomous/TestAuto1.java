@@ -89,26 +89,44 @@ public class TestAuto1 extends CommandBase
 		
 		// First action is to drive forward 3 meters and stop. Note Brakes not currently implemented.
 		
-		command = new AutoDriveProfiled(driveBase, 3, StopMotors.stop, Brakes.on);
+		command = new AutoDriveProfiled(driveBase, 1, StopMotors.stop, Brakes.on);
 		
 		commands.addCommands(command);
 		
 		// Next action is to drive backward 3 meters and stop. Note Brakes not currently implemented.
 		
-		command = new AutoDriveProfiled(driveBase, -3, StopMotors.stop, Brakes.on);
+		command = new AutoDriveProfiled(driveBase, -1, StopMotors.stop, Brakes.on);
 		
 		commands.addCommands(command);
 
 		// Now strafe left 3 meters.
 
-		command = new AutoStrafeProfiled(driveBase, 3, StopMotors.stop, Brakes.on);
+		command = new AutoStrafeProfiled(driveBase, 1, StopMotors.stop, Brakes.on);
 		
 		commands.addCommands(command);
 
 		// Now strafe right 3 meters.
 
-		command = new AutoStrafeProfiled(driveBase, -3, StopMotors.stop, Brakes.on);
+		command = new AutoStrafeProfiled(driveBase, -1, StopMotors.stop, Brakes.on);
 		
+		commands.addCommands(command);
+
+		// Now rotate 90 degrees left.
+
+		command = new AutoRotate(driveBase, 90);
+
+		commands.addCommands(command);
+
+		// Now rotate 180 degrees right.
+
+		command = new AutoRotateProfiled(driveBase, -180);
+
+		commands.addCommands(command);
+
+		// Now rotate 90 degrees left.
+
+		command = new AutoRotateProfiled(driveBase, 90);
+
 		commands.addCommands(command);
 
 		// Launch autonomous command sequence.

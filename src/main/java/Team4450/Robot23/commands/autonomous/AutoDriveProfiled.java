@@ -12,17 +12,17 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 
 /**
- * A command that will drive the robot to the specified distance using a motion profiled
- * PID command and steering correction. Velocity & acceleration are a guess, need to 
- * characterize the robot for good numbers. Motion profile will accelerate the robot to
- * an appropriate speed and decelerate to a stop at the target distance.
+ * A command that will drive the robot forward/backward to the specified distance using
+ * a motion profiled PID command and steering correction. Velocity & acceleration are a 
+ * guess, need to characterize the robot for good numbers. Motion profile will accelerate
+ * the robot to an appropriate speed and decelerate to a stop at the target distance.
  */
 public class AutoDriveProfiled extends ProfiledPIDCommand 
 {
     private DriveBase     driveBase;
 
-    private static double kP = 1.2, kI = .15, kD = 0, kToleranceMeters = .15, curve;
-    private double        distance, kSteeringGain = .07, startTime;
+    private static double kP = 1.2, kI = .15, kD = 0, kToleranceMeters = .15;
+    private double        distance, startTime;
     private int           iterations;
     private StopMotors    stop;
     private Brakes        brakes;
@@ -44,11 +44,11 @@ public class AutoDriveProfiled extends ProfiledPIDCommand
             driveBase::getDistanceTraveled,
             // Set target distance.
             distance,
-            // Pipe output to drive robot. Curve calculated in execute function.
-            (output, setpoint) -> driveBase.drive(output, curve, 0)); //,
+            // Pipe output to drive robot.
+            (output, setpoint) -> driveBase.drive(output, 0, 0)); //,
             // Require the drive base. Note: the db is required by the calling
             // autonmous command so we don't need it here and doing it here will
-            // interrupted the calling auto command.
+            // interrupt the calling auto command.
             //);
 
         Util.consoleLog("distance=%.3fm  stop=%s  brakes=%s", distance, stop, brakes);
@@ -84,17 +84,15 @@ public class AutoDriveProfiled extends ProfiledPIDCommand
     {
         Util.consoleLog();
         
-        double yaw = driveBase.getYaw();
-
-        curve = Util.clampValue(-yaw * kSteeringGain, 1.0);
+        double yaw = -driveBase.getYaw();   // Invert to swerve angle convention.
 
         super.execute();
 
         LCD.printLine(LCD_4, "Wheel distance=%.3f", driveBase.getDistanceTraveled());
 
-        Util.consoleLog("tg=%.3f  dist=%.3f  sp=%.3f err=%.3f  yaw=%.2f curve=%.2f", 
+        Util.consoleLog("tg=%.3f  dist=%.3f  sp=%.3f err=%.3f  yaw=%.2f", 
                         getController().getGoal().position, driveBase.getDistanceTraveled(), 
-                        getController().getSetpoint().position, getController().getPositionError(), yaw, curve);
+                        getController().getSetpoint().position, getController().getPositionError(), yaw);
 
         iterations++;
     }

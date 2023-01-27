@@ -57,7 +57,7 @@ public class ShuffleBoard extends SubsystemBase
         Pose2d pose = RobotContainer.driveBase.getRobotPose();
       
         LCD.printLine(LCD_4, "pose x=%.1fm  y=%.1fm  deg=%.1f  yaw=%.1f", pose.getX(), 
-                      pose.getY(), pose.getRotation().getDegrees(), RobotContainer.navx.getYaw());
+                      pose.getY(), pose.getRotation().getDegrees(), RobotContainer.driveBase.getYaw());
                           
         if (tracing) FunctionTracer.INSTANCE.exitFunction("ShuffleBoard.updateDS");
     }

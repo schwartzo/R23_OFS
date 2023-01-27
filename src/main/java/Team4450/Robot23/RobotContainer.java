@@ -177,15 +177,21 @@ public class RobotContainer
 		// Second is using the convenience method getRightYDS() which returns getRightY() as a DoubleSupplier. 
 		// We show both ways here as an example.
 
-		// The controls are for field-oriented driving:
+		// The joystick controls for driving:
 		// Left stick Y axis -> forward and backwards movement (throttle)
 		// Left stick X axis -> left and right movement (strafe)
 		// Right stick X axis -> rotation
-		// Note: X and Y axis on stick is opposite X and Y axis on the WheelSpeeds object.
-		// Wheelspeeds X axis is + down the field away from alliance wall. +Y axis is left
+		// Note: X and Y axis on stick is opposite X and Y axis on the WheelSpeeds object
+		// and the odometry pose2d classes.
+		// Wheelspeeds +X axis is down the field away from alliance wall. +Y axis is left
 		// when standing at alliance wall looking down the field.
 		// This is handled here by swapping the inputs. Note that first axis parameter below
 		// is the X wheelspeeds input and the second is Y wheelspeeds input.
+
+		// Note that field oriented driving does the movements in relation to the field. So
+		// throttle is always down the field and back and strafe is always left right from
+		// the down the field axis, not matter which way the robot is pointing. Robot oriented
+		// driving movemments are in relation to the direction the robot is currently pointing.
 
 		driveBase.setDefaultCommand(new DriveCommand(
 				driveBase,

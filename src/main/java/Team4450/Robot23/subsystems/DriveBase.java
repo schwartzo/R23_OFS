@@ -168,7 +168,7 @@ public class DriveBase extends SubsystemBase
             ModulePosition.FL,
             // This parameter is optional, but will allow you to see the current state of the module on the dashboard.
             tab.getLayout("Front Left Module", BuiltInLayouts.kGrid)
-                    .withSize(1, ModuleConfiguration.shuffleBoardRows) // 2,
+                    .withSize(2, ModuleConfiguration.shuffleBoardRows) // 2,
                     .withPosition(0, 0),
             // This can either be STANDARD or FAST depending on your gear configuration
             Mk4iSwerveModuleHelper.GearRatio.L1,
@@ -190,8 +190,8 @@ public class DriveBase extends SubsystemBase
     m_frontRightModule = Mk4iSwerveModuleHelper.createNeo(
             ModulePosition.FR,
             tab.getLayout("Front Right Module", BuiltInLayouts.kGrid)
-                    .withSize(1, ModuleConfiguration.shuffleBoardRows)
-                    .withPosition(1, 0), // 2, 0
+                    .withSize(2, ModuleConfiguration.shuffleBoardRows)
+                    .withPosition(2, 0), // 2, 0
             Mk4iSwerveModuleHelper.GearRatio.L1,
             FRONT_RIGHT_MODULE_DRIVE_MOTOR,
             FRONT_RIGHT_MODULE_STEER_MOTOR,
@@ -204,8 +204,8 @@ public class DriveBase extends SubsystemBase
     m_backLeftModule = Mk4iSwerveModuleHelper.createNeo(
             ModulePosition.BL,
             tab.getLayout("Back Left Module", BuiltInLayouts.kGrid)
-                    .withSize(1, ModuleConfiguration.shuffleBoardRows) // 2,4
-                    .withPosition(2, 0),  // 4, 0
+                    .withSize(2, ModuleConfiguration.shuffleBoardRows) // 2,4
+                    .withPosition(4, 0),  // 4, 0
             Mk4iSwerveModuleHelper.GearRatio.L1,
             BACK_LEFT_MODULE_DRIVE_MOTOR,
             BACK_LEFT_MODULE_STEER_MOTOR,
@@ -218,8 +218,8 @@ public class DriveBase extends SubsystemBase
     m_backRightModule = Mk4iSwerveModuleHelper.createNeo(
             ModulePosition.BR,
             tab.getLayout("Back Right Module", BuiltInLayouts.kGrid)
-                    .withSize(1, ModuleConfiguration.shuffleBoardRows) // 2,4
-                    .withPosition(3, 0),  // 6,0
+                    .withSize(2, ModuleConfiguration.shuffleBoardRows) // 2,4
+                    .withPosition(6, 0),  // 6,0
             Mk4iSwerveModuleHelper.GearRatio.L1,
             BACK_RIGHT_MODULE_DRIVE_MOTOR,
             BACK_RIGHT_MODULE_STEER_MOTOR,
@@ -232,7 +232,7 @@ public class DriveBase extends SubsystemBase
     // Encoders to zero.
     resetModuleEncoders();
 
-    // Set starting position on field.
+    // Set default starting position on field.
     setOdometry(DEFAULT_STARTING_POSE);
 
     // Initialze drive code by issuing a no movement drive command.
@@ -398,6 +398,7 @@ public class DriveBase extends SubsystemBase
     lastPose = currentPose;
     
     double currentDistance = poseOffset.getX() + poseOffset.getY();
+    //double currentDistance = Math.sqrt(Math.pow(poseOffset.getX(), 2) + Math.pow(poseOffset.getY(), 2));
 
     distanceTraveled += currentDistance;
 
@@ -409,7 +410,7 @@ public class DriveBase extends SubsystemBase
 
     lastYawAngle = m_navx.getAngle();
 
-    SmartDashboard.putNumber("Yaw Angle", yawAngle);
+    SmartDashboard.putNumber("Yaw Angle", getYaw());
 
     // Now update the pose of each wheel (module).
     updateModulePose(m_frontLeftModule);
@@ -604,7 +605,10 @@ public class DriveBase extends SubsystemBase
 
   /**
    * Set modules to point "forward". This is same as joystick
-   * to neutral position with auto return to zero set true.
+   * to neutral position with auto return to zero set true. The
+   * calling command must require the drive base and should run
+   * for 1 second so it prevents the DriveCommand from stopping
+   * wheel turn.
    * TODO: Not currently working.
    */
   public void setModulesToForward()
@@ -663,22 +667,22 @@ public class DriveBase extends SubsystemBase
 
   /**
    * Returns the current yaw angle of the robot measured from the last
-   * call to resetYaw(). Angle sign is WPILib/Navx convention.
-   * @return The yaw angle. + is right (cw) - is left (ccw).
+   * call to resetYaw(). Angle sign is WPILib convention, inverse of NavX.
+   * @return The yaw angle. - is right (cw) + is left (ccw).
    */
   public double getYaw()
   {
-    return yawAngle;
+    return -yawAngle;
   }
 
   /**
    * Returns the current yaw angle of the robot measured from the last
-   * call to resetYaw(). Angle sign is radians convention.
+   * call to resetYaw().
    * @return The yaw angle in radians.
    */
   public double getYawR()
   {
-    return Math.toRadians(yawAngle);
+    return Math.toRadians(-yawAngle);
   }
 
   /**
@@ -687,5 +691,10 @@ public class DriveBase extends SubsystemBase
   public void resetYaw()
   {
     yawAngle = 0;
+  }
+
+  public void stop()
+  {
+    drive(0, 0, 0);
   }
 }

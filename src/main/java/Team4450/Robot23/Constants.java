@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "ORF23-01.24.23-1";
+	public static String		PROGRAM_NAME = "ORF23-01.26.23-1";
 
 	public static Robot			robot;
 
@@ -74,7 +74,7 @@ public final class Constants
     // second or 1 unit in 1/3 second. So larger slew is faster slew to
     // 100%. 1.5 is 100% in 3/4 second. 2 is 100% in 1/2 second.
     public static final double  THROTTLE_SLEW = 1.5;        
-    public static final double  ROTATION_SLEW = 1.5;  //3.0;
+    public static final double  ROTATION_SLEW = 2.0;  //3.0;
 
     /**
      * The left-to-right distance between the drivetrain wheels
