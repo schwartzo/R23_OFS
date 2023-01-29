@@ -1,17 +1,11 @@
 package Team4450.Robot23.commands.autonomous;
 
-import static Team4450.Robot23.Constants.*;
-
 import Team4450.Lib.Util;
 import Team4450.Robot23.RobotContainer;
 import Team4450.Robot23.subsystems.DriveBase;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 
 /**
  * A command that will turn the robot to the specified angle using a motion profiled
@@ -24,7 +18,7 @@ public class AutoRotate extends PIDCommand
     
     private static AutoRotate   thisInstance;
 
-    private static double kP = .005, kI = kP / 10, kD = 0, kToleranceDeg = .5 ;
+    private static double kP = .003, kI = kP, kD = 0, kToleranceDeg = .5 ;
     private double        startTime;
     private int           iterations;
 
@@ -94,6 +88,8 @@ public class AutoRotate extends PIDCommand
     // the sign change before sending on to driveBase.drive.
     private void drive(double throttle, double strafe, double rotation)
     {
+        rotation = Util.clampValue(rotation, 1.0);
+
         Util.consoleLog("t=%.4f  s=%.4f  rot=%.5f", throttle, strafe, rotation);
         
         // Have to invert for sim...not sure why.
@@ -117,12 +113,12 @@ public class AutoRotate extends PIDCommand
 	{
 		Util.consoleLog("interrupted=%b", interrupted);
 		
-		driveBase.drive(0, 0, 0);
+		driveBase.stop();
 
-        Util.consoleLog("after stop  hdg=%.2f  yaw=%.2f", RobotContainer.navx.getHeading(), 
-                        driveBase.getYaw());
-		
-		Util.consoleLog("2  hdg=%.2f  yaw=%.2f", RobotContainer.navx.getHeading(), driveBase.getYaw());
+		Util.consoleLog("hdg=%.2f  target=%.2f  yaw=%.2f  error=%.2f pct", RobotContainer.navx.getHeading(), 
+                        getController().getSetpoint(), driveBase.getYaw(),
+                        (driveBase.getYaw() - Math.abs(getController().getSetpoint())) / 
+                        Math.abs(getController().getSetpoint()) * 100.0);
         
 		Util.consoleLog("iterations=%d  elapsed time=%.3fs", iterations, Util.getElaspedTime(startTime));
 

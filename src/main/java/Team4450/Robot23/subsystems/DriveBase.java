@@ -297,18 +297,18 @@ public class DriveBase extends SubsystemBase
   }
 
   /**
-   * With the directional speeds, generates a Chassis Speeds object which
+   * With the supplied directional speeds, generates a Chassis Speeds object which
    * is used to command the swerve modules to move. This is how we drive
    * the robot. The motion specified continues until drive is called again.
-   * This method is typicalled by the driving command passing inputs (typically
-   * joystick inputs) on a regular basis. Speeds in m/s and radians/s.
-   * @param throttle Throttle speed. + is forward.
-   * @param strafe Strafe speed. + is left.
-   * @param rotation Rotation speed. + is left.
+   * This method is typically called by the driving command passing inputs (typically
+   * joystick inputs) on a regular basis.
+   * @param throttle Throttle (Fwd/Back) as a % of maximum speed. + is forward.
+   * @param strafe Strafe (Left/Right) as a % of maximum speed. + is left.
+   * @param rotation Rotational speed as a % of maximum rotational speed. + is left.
    */
   public void drive(double throttle, double strafe, double rotation)
   {
-    // Convert joystick values into speeds.
+    // Convert joystick % values into speeds.
 
     throttle *= MAX_VELOCITY_METERS_PER_SECOND;
     strafe   *= MAX_VELOCITY_METERS_PER_SECOND;

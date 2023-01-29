@@ -113,7 +113,7 @@ public class AutoStrafeProfiled extends ProfiledPIDCommand
 	{
 		Util.consoleLog("interrupted=%b", interrupted);
         
-		if (stop == StopMotors.stop) driveBase.drive(0, 0, 0);
+		if (stop == StopMotors.stop) driveBase.stop();
 		
 		double actualDist = Math.abs(driveBase.getDistanceTraveled());
 		

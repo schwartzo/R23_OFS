@@ -24,8 +24,8 @@ public class AutoRotateProfiled extends ProfiledPIDCommand
 
     // Note: kP was 15 but sim does not work right as 15 causes to much rotation. 5 works in sim.
     // But, 5 may be too little for a real robot and not output enough power to move. Need to test.
-    private static double kP = .5, kI = kP / 100, kD = 0, kToleranceRad = .001;
-    private double        startTime;
+    private static double kP = 1.7, kI = kP / 10, kD = .02, kToleranceRad = .01;
+    private double        startTime, targetAngle;
     private int           iterations;
 
     // We work in degrees but the profile works in radians, so we convert. 70 d/s is an eyeball
@@ -58,6 +58,7 @@ public class AutoRotateProfiled extends ProfiledPIDCommand
 
         this.driveBase = driveBase;
         thisInstance = this;
+        this.targetAngle = targetAngle;
 
         // Set the controller tolerance.
         getController().setTolerance(kToleranceRad);
@@ -98,6 +99,8 @@ public class AutoRotateProfiled extends ProfiledPIDCommand
     // the sign change before sending on to driveBase.drive.
     private void drive(double throttle, double strafe, double rotation)
     {
+        rotation = Util.clampValue(rotation, 1.0);
+        
         Util.consoleLog("t=%.4f  s=%.4f  rot=%.5f", throttle, strafe, rotation);
         
         // Have to invert for sim...not sure why.
@@ -111,7 +114,8 @@ public class AutoRotateProfiled extends ProfiledPIDCommand
     {
         // End when the controller is at the setpoint.
         //return getController().atGoal();
-        return (Math.abs(getController().getPositionError()) <= kToleranceRad) && iterations > 1;
+        
+        return Math.abs((getController().getGoal().position - m_measurement.getAsDouble())) <= kToleranceRad;
     }
   	
 	@Override
@@ -121,7 +125,11 @@ public class AutoRotateProfiled extends ProfiledPIDCommand
 		
 		driveBase.stop();
 		
-		Util.consoleLog("hdg=%.2f  yaw=%.2f", RobotContainer.navx.getHeading(), driveBase.getYaw());
+        double actualYaw = driveBase.getYaw();
+
+		Util.consoleLog("hdg=%.2f  target=%.2f  yaw=%.2f  error=%.2f pct", RobotContainer.navx.getHeading(), 
+                        targetAngle, actualYaw,
+                        (targetAngle - actualYaw) / Math.abs(targetAngle) * 100.0);
         
 		Util.consoleLog("iterations=%d  elapsed time=%.3fs", iterations, Util.getElaspedTime(startTime));
 

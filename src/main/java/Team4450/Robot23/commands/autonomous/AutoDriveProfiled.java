@@ -21,7 +21,7 @@ public class AutoDriveProfiled extends ProfiledPIDCommand
 {
     private DriveBase     driveBase;
 
-    private static double kP = 1.2, kI = .15, kD = 0, kToleranceMeters = .15;
+    private static double kP = 1.2, kI = .15, kD = 0, kToleranceMeters = .10;
     private double        distance, startTime;
     private int           iterations;
     private StopMotors    stop;
@@ -103,7 +103,7 @@ public class AutoDriveProfiled extends ProfiledPIDCommand
         // End when the target distance is reached. The PIDController atGoal and atSetPoint
         // functions do not seem to work. Don't know why.
 
-        return (Math.abs(driveBase.getDistanceTraveled()) >= Math.abs(distance));
+        return (Math.abs(distance - driveBase.getDistanceTraveled())) <= kToleranceMeters;
     }
 	
 	@Override
@@ -111,7 +111,7 @@ public class AutoDriveProfiled extends ProfiledPIDCommand
 	{
 		Util.consoleLog("interrupted=%b", interrupted);
         
-		if (stop == StopMotors.stop) driveBase.drive(0, 0, 0);
+		if (stop == StopMotors.stop) driveBase.stop();
 		
 		double actualDist = Math.abs(driveBase.getDistanceTraveled());
 		
