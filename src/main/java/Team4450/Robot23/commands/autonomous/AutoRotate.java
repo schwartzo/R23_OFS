@@ -8,9 +8,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
 /**
- * A command that will turn the robot to the specified angle using a motion profiled
- * PID command. Velocity and accelleration are a guess, need to characterize the robot 
- * for good numbers.
+ * A command that will turn the robot to the specified angle using a PID command.
+ * Acceleration is a guess, need to characterize the robot for good numbers.
  */
 public class AutoRotate extends PIDCommand 
 {

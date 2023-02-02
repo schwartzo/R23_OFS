@@ -7,8 +7,10 @@ import Team4450.Lib.SRXMagneticEncoderRelative;
 import Team4450.Lib.Util;
 import Team4450.Robot23.RobotContainer;
 import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.Brakes;
+import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.Pid;
 import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.StopMotors;
 import Team4450.Robot23.subsystems.DriveBase;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -126,6 +128,10 @@ public class TestAuto1 extends CommandBase
 		// Now rotate 90 degrees left.
 
 		command = new AutoRotateProfiled(driveBase, 90);
+
+		commands.addCommands(command);
+
+		command = new AutoDrive(driveBase, .75, 2.0, StopMotors.stop, Brakes.on, Pid.on);
 
 		commands.addCommands(command);
 

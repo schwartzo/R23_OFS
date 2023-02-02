@@ -641,6 +641,17 @@ public class DriveBase extends SubsystemBase
     m_backRightModule.setStartingPosition();
 
     m_navx.reset(); // or zeroGyro();
+
+    // Reseting encoders here seems logical...but in testing it did not
+    // work as expected. Now, if you set to start position and disable
+    // enable, you can continue driving. If you reset the encoders here
+    // and disable/enable, the drive code is confused. Does not make
+    // sense and suggests somewhere in the swerve code it is tracking
+    // drive information that is not being reset and so with encoders
+    // reset, the two bits of information are no longer in sync.
+    // TODO: Researh this further trying to explain why resetting the
+    // encoders here does not work.
+    //resetModuleEncoders();
   }
 
   /**

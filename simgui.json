@@ -45,6 +45,9 @@
     "transitory": {
       "Shuffleboard": {
         "Drivetrain": {
+          "Front Left Module": {
+            "open": true
+          },
           "open": true
         },
         "open": true
