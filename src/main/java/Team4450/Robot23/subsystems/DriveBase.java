@@ -34,12 +34,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.RobotBase;
 import static Team4450.Robot23.Constants.*;
 
-import org.ejml.dense.row.misc.TransposeAlgs_DDRM;
-
 public class DriveBase extends SubsystemBase 
 {
   private boolean       autoReturnToZero = false, fieldOriented = true;
-  private double        distanceTraveled, lastDistanceTraveled;
+  private double        distanceTraveled;
   private double        yawAngle, lastYawAngle;
   private Pose2d        lastPose;
 
@@ -72,7 +70,7 @@ public class DriveBase extends SubsystemBase
   public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
           Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
           
-  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+  private static final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
           // Front left
           new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
           // Front right
@@ -101,7 +99,8 @@ public class DriveBase extends SubsystemBase
       { new SwerveModulePosition(), new SwerveModulePosition(), new SwerveModulePosition(),
         new SwerveModulePosition() }; 
 
-  // TODO: Fix the vectors.
+  // TODO: Fix the vectors used to set std deviations for measurements. Using default
+  // for now. Not sure how to determine the values.
   private final SwerveDrivePoseEstimator m_odometry = new SwerveDrivePoseEstimator(
       m_kinematics,
       getGyroRotation2d(),
@@ -111,6 +110,9 @@ public class DriveBase extends SubsystemBase
       // VecBuilder.fill(0.05),
       // VecBuilder.fill(0.1, 0.1, 0.1));
 
+  // Field2d object creates the field display on the simulation and gives us an API
+  // to control what is displayed (the simulated robot).
+  
   private final Field2d     field2d = new Field2d();
 
   public DriveBase() 
@@ -128,6 +130,9 @@ public class DriveBase extends SubsystemBase
         //m_navx.reset();
       } catch (Exception e) { }
     }).start();
+
+    // Creates a tab on our driver station dashboard used by the swerve code to
+    // display setup informmation.
 
     ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
@@ -326,6 +331,16 @@ public class DriveBase extends SubsystemBase
     //    MAX_VOLTAGE);
 
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
+
+    setModuleStates(states);
+  }
+
+  /**
+   * Set the swerve modules to their desired states;
+   * @param desiredStates Array of module states.
+   */
+  public void setModuleStates(SwerveModuleState[] states)
+  {
     
     SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
 
@@ -704,8 +719,16 @@ public class DriveBase extends SubsystemBase
     yawAngle = 0;
   }
 
+  /**
+   * Stop robot motion.
+   */
   public void stop()
   {
     drive(0, 0, 0);
+  }
+
+  public static SwerveDriveKinematics getKinematics()
+  {
+    return m_kinematics;
   }
 }

@@ -88,7 +88,7 @@ public class AutoDriveProfiled extends ProfiledPIDCommand
 
         super.execute();
 
-        LCD.printLine(LCD_4, "Wheel distance=%.3f", driveBase.getDistanceTraveled());
+        LCD.printLine(LCD_5, "Wheel distance=%.3f", driveBase.getDistanceTraveled());
 
         Util.consoleLog("tg=%.3f  dist=%.3f  sp=%.3f err=%.3f  yaw=%.2f", 
                         getController().getGoal().position, driveBase.getDistanceTraveled(), 
