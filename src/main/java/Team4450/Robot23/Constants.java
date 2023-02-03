@@ -1,11 +1,16 @@
 
 package Team4450.Robot23;
 
+import java.util.Arrays;
 import java.util.Properties;
 
-import Team4450.Lib.Util;
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 
 /**
@@ -49,14 +54,15 @@ public final class Constants
 	public static final int		LCD_2 = 2;	    // Serve Drive command.
 	public static final int		LCD_3 = 3;	    // ShuffleBoard subsystem.
 	public static final int		LCD_4 = 4;	    // ShuffleBoard subsystem.
-	public static final int		LCD_5 = 5;	    // ShuffleBoard subsystem.
+	public static final int		LCD_5 = 5;	    // Autonomous commands.
 	public static final int		LCD_7 = 7;	    // ShuffleBoard subsystem.
 	public static final int		LCD_8 = 8;	    // ShuffleBoard subsystem.
 	public static final int		LCD_9 = 9;	    // ShuffleBoard subsystem.
 	public static final int		LCD_10 = 10;	// ShuffleBoard subsystem.
 
 	// Default starting field position in meters for pose tracking. For full field lower left corner.
-	public static final Pose2d	DEFAULT_STARTING_POSE = new Pose2d(2.703, 2.797, new Rotation2d(0));
+	public static final Pose2d	BLUE_DEFAULT_STARTING_POSE = new Pose2d(2.703, 2.797, new Rotation2d(0));
+	public static final Pose2d	RED_DEFAULT_STARTING_POSE = new Pose2d(14, 2.797, new Rotation2d(Math.toRadians(180)));
     
 	// Next group of constants are for Swerve drive.
 
@@ -132,4 +138,15 @@ public final class Constants
     public static final double  DB_POSITIONAL_KD = 36.5; 
     public static final double  DB_VELOCITY_KP = .12;  
     public static final double  DB_VELOCITY_KD = 0.0;
+
+    private final AprilTagFieldLayout aprlFieldLayout = new AprilTagFieldLayout(Arrays.asList(
+    new AprilTag(1, new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters( 42.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, Math.PI))),
+    new AprilTag(2, new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(108.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, Math.PI))),
+    new AprilTag(3, new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(174.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, Math.PI))),
+    new AprilTag(4, new Pose3d(Units.inchesToMeters(636.96), Units.inchesToMeters(265.74), Units.inchesToMeters(27.38), new Rotation3d(0.0, 0.0, Math.PI))),
+    new AprilTag(5, new Pose3d(Units.inchesToMeters( 14.25), Units.inchesToMeters(265.74), Units.inchesToMeters(27.38), new Rotation3d(0.0, 0.0, 0.0))),
+    new AprilTag(6, new Pose3d(Units.inchesToMeters( 40.45), Units.inchesToMeters(174.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, 0.0))),
+    new AprilTag(7, new Pose3d(Units.inchesToMeters( 40.45), Units.inchesToMeters(108.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, 0.0))),
+    new AprilTag(8, new Pose3d(Units.inchesToMeters( 40.45), Units.inchesToMeters( 42.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, 0.0)))
+  ), Units.inchesToMeters(651.25), Units.inchesToMeters(315.5));
 }

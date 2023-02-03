@@ -20,7 +20,7 @@
   "Window": {
     "###/SmartDashboard/Auto Program": {
       "Collapsed": "0",
-      "Pos": "135,30",
+      "Pos": "135,29",
       "Size": "361,66"
     },
     "###/SmartDashboard/Field": {
@@ -30,7 +30,7 @@
     },
     "###/SmartDashboard/Field2d": {
       "Collapsed": "0",
-      "Pos": "409,23",
+      "Pos": "408,16",
       "Size": "1054,565"
     },
     "###/SmartDashboard/Gyro2": {
@@ -45,7 +45,7 @@
     },
     "###FMS": {
       "Collapsed": "0",
-      "Pos": "17,786",
+      "Pos": "0,688",
       "Size": "388,182"
     },
     "###Joysticks": {
@@ -56,7 +56,7 @@
     "###NetworkTables": {
       "Collapsed": "0",
       "Pos": "314,59",
-      "Size": "1356,860"
+      "Size": "1361,860"
     },
     "###Other Devices": {
       "Collapsed": "0",

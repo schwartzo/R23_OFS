@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -92,7 +93,7 @@ public class RobotContainer
     private CameraFeed			cameraFeed;
     
 	// Trajectories.
-    //public static Trajectory    ;
+    public static Trajectory    testTrajectory;
 
     // List of autonomous programs. Any change here must be reflected in getAutonomousCommand()
     // and setAutoChoices() which appear later in this class.
@@ -102,6 +103,8 @@ public class RobotContainer
 		TestAuto1,
 		TestAuto3
 	}
+
+	public static Pose2d	defaultStartingPose;
 
 	// Classes to access drop down lists on Driver Station.
 	private static SendableChooser<AutoProgram>	autoChooser;
@@ -118,22 +121,39 @@ public class RobotContainer
       
 		getMatchInformation();
 
-		// Read properties file from RoboRio "disk".
+		// Read properties file from RoboRio "disk". If we fail to open the file,
+		// log the exception but continue and we will default to competition robot.
       
-		robotProperties = Util.readProperties();
+		try {
+			robotProperties = Util.readProperties();
+		} catch (Exception e) { Util.logException(e);}
 
 		// Is this the competition or clone robot?
    		
-		if (robotProperties.getProperty("RobotId").equals("comp"))
+		if (robotProperties == null || robotProperties.getProperty("RobotId").equals("comp"))
 			isComp = true;
 		else
 			isClone = true;
+
+		// Set default starting position based on alliance color.
+
+		if (RobotBase.isSimulation()) alliance = Alliance.Blue;
+
+		if (alliance == Alliance.Blue)
+			defaultStartingPose = BLUE_DEFAULT_STARTING_POSE;
+		else
+			defaultStartingPose = RED_DEFAULT_STARTING_POSE;
  		
 		// Set compressor enabled switch on dashboard from properties file.
 		// Later code will read that setting from the dashboard and turn 
 		// compressor on or off in response to dashboard setting.
  		
-		SmartDashboard.putBoolean("CompressorEnabled", Boolean.parseBoolean(robotProperties.getProperty("CompressorEnabledByDefault")));
+		boolean compressorEnabled = true;	// Default if no property.
+
+		if (robotProperties != null) 
+			compressorEnabled = Boolean.parseBoolean(robotProperties.getProperty("CompressorEnabledByDefault"));
+		
+		SmartDashboard.putBoolean("CompressorEnabled", compressorEnabled);
 
 		// Reset PDB & PCM sticky faults.
     
@@ -244,6 +264,7 @@ public class RobotContainer
         // being done while we are getting started up. Hopefully will complete before we are ready to
         // use the trajectory. See Robot22B2 for example of how to do this.
 
+		testTrajectory = loadTrajectoryFile("Slalom-1.wpilib.json");
 	}
 
 	/**
@@ -318,7 +339,7 @@ public class RobotContainer
 	public Command getAutonomousCommand() 
 	{
 		AutoProgram		program = AutoProgram.NoProgram;
-		Pose2d			startingPose = DEFAULT_STARTING_POSE;
+		Pose2d			startingPose = defaultStartingPose;
 		Command			autoCommand = null;
 		
 		Util.consoleLog();
@@ -370,14 +391,14 @@ public class RobotContainer
     // Configure SendableChooser (drop down list on dashboard) with starting pose choices and
 	// send them to SmartDashboard/ShuffleBoard.
 	
-	private static void setStartingPoses()
+	private void setStartingPoses()
 	{
 		Util.consoleLog();
 		
 		startingPoseChooser = new SendableChooser<Pose2d>();
 		
 		SendableRegistry.add(startingPoseChooser, "Start Position");
-		startingPoseChooser.setDefaultOption("Default", DEFAULT_STARTING_POSE);
+		startingPoseChooser.setDefaultOption("Default", defaultStartingPose);
 		//startingPoseChooser.addOption("Blue 1", BLUE_1);		
 				
 		SmartDashboard.putData(startingPoseChooser);

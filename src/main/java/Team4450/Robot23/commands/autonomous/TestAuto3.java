@@ -100,38 +100,38 @@ public class TestAuto3 extends CommandBase
 		// swerve code. Here we are dealing directly with swerve drive code so X is fwd/back
 		// down the field and Y is left/right (strafe).
 
-        // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        //                                 // Start at the origin set above
-        //                                 startingPose,
-        //                                 // Pass through these two interior waypoints, making an 's' curve path
-        //                                 List.of(
-        //                                     new Translation2d(startingPose.getX() + 3, startingPose.getY() + 1),
-        //                                     new Translation2d(startingPose.getX() + 6, startingPose.getY() - 1)
-        //                                 ),
-        //                                 // End 9 meters straight ahead of where we started, facing forward
-        //                                 new Pose2d(startingPose.getX() + 9, startingPose.getY(), startingPose.getRotation()),
-        //                                 // Pass config
-        //                                 config);		
-
         Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
                                         // Start at the origin set above
                                         startingPose,
-                                        // Pass through these interior waypoints
+                                        // Pass through these two interior waypoints, making an 's' curve path
                                         List.of(
-                                            new Translation2d(startingPose.getX() + 1, startingPose.getY()),
-                                            new Translation2d(startingPose.getX() + 1.5, startingPose.getY() + .5),
-                                            new Translation2d(startingPose.getX() + 2.0, startingPose.getY() + 1.0),
-                                            new Translation2d(startingPose.getX() + 1.5, startingPose.getY() + 1.5),
-                                            new Translation2d(startingPose.getX() + 1, startingPose.getY() + 2.0)
-                                            ),
-                                        // End back where we started but left 2m, facing 180 from start.
-                                        new Pose2d(startingPose.getX(), startingPose.getY() + 2.0, new Rotation2d(Math.toRadians(180))),
+                                            new Translation2d(startingPose.getX() - 3, startingPose.getY() - 1),
+                                            new Translation2d(startingPose.getX() - 6, startingPose.getY() + 1)
+                                        ),
+                                        // End 9 meters straight ahead of where we started, facing forward
+                                        new Pose2d(startingPose.getX() - 9, startingPose.getY(), startingPose.getRotation()),
                                         // Pass config
                                         config);		
+
+        // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        //                                 // Start at the origin set above
+        //                                 startingPose,
+        //                                 // Pass through these interior waypoints
+        //                                 List.of(
+        //                                     new Translation2d(startingPose.getX() + 1, startingPose.getY()),
+        //                                     new Translation2d(startingPose.getX() + 1.5, startingPose.getY() + .5),
+        //                                     new Translation2d(startingPose.getX() + 2.0, startingPose.getY() + 1.0),
+        //                                     new Translation2d(startingPose.getX() + 1.5, startingPose.getY() + 1.5),
+        //                                     new Translation2d(startingPose.getX() + 1, startingPose.getY() + 2.0)
+        //                                     ),
+        //                                 // End back where we started but left 2m, facing 180 from start.
+        //                                 new Pose2d(startingPose.getX(), startingPose.getY() + 2.0, new Rotation2d(Math.toRadians(180))),
+        //                                 // Pass config
+        //                                 config);		
         
 
         command = new AutoDriveTrajectory(driveBase, exampleTrajectory, StopMotors.stop, Brakes.on);
-        //command = new AutoDriveTrajectory(driveBase, RobotContainer.slalom1Trajectory, StopMotors.stop, Brakes.on);
+        //command = new AutoDriveTrajectory(driveBase, RobotContainer.testTrajectory, StopMotors.stop, Brakes.on);
 		
 		commands.addCommands(command);
 		

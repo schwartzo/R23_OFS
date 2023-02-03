@@ -81,6 +81,10 @@ public class DriveCommand extends CommandBase
         strafe = slewY.calculate(strafe);
         rotation = slewRot.calculate(rotation);
 
+        // throttle *= -1;
+        // strafe *= -1;
+        // rotation *= -1;
+
         driveBase.drive(throttle, strafe, rotation);
     }
 

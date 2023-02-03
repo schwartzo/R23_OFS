@@ -112,7 +112,7 @@ public class DriveBase extends SubsystemBase
 
   // Field2d object creates the field display on the simulation and gives us an API
   // to control what is displayed (the simulated robot).
-  
+
   private final Field2d     field2d = new Field2d();
 
   public DriveBase() 
@@ -238,7 +238,7 @@ public class DriveBase extends SubsystemBase
     resetModuleEncoders();
 
     // Set default starting position on field.
-    setOdometry(DEFAULT_STARTING_POSE);
+    setOdometry(RobotContainer.defaultStartingPose);
 
     // Initialze drive code by issuing a no movement drive command.
     drive(0, 0, 0);
@@ -284,21 +284,21 @@ public class DriveBase extends SubsystemBase
   }
 
   /**
-   * Get heading in degrees.
-   * @return Heading in degrees. 0 to +- 180.
+   * Get Gyro angle in degrees.
+   * @return Angle in degrees. 0 to +- 180.
    */
-  public double getHeadingDegrees() 
+  public double getGyroAngleDegrees() 
   {
     return Math.IEEEremainder((-m_navx.getAngle()), 360);
   }
 
   /**
-   * Get heading in radians.
-   * @return Heading as rotation2d (radians).
+   * Get Gyro Angle in radians.
+   * @return Angle as rotation2d (radians).
    */
-  public Rotation2d getHeadingRotation2d() 
+  public Rotation2d getGyroAngleRotation2d() 
   {
-    return Rotation2d.fromDegrees(getHeadingDegrees());
+    return Rotation2d.fromDegrees(getGyroAngleDegrees());
   }
 
   /**
@@ -322,7 +322,7 @@ public class DriveBase extends SubsystemBase
     // Create chassis speeds in either field or robot drive orientation.
 
     m_chassisSpeeds = fieldOriented
-        ? ChassisSpeeds.fromFieldRelativeSpeeds(throttle, strafe, rotation, getHeadingRotation2d())
+        ? ChassisSpeeds.fromFieldRelativeSpeeds(throttle, strafe, rotation, getGyroAngleRotation2d())
         : new ChassisSpeeds(throttle, strafe, rotation);
 
     //LCD.printLine(4, "max vel=%.3fms  max ang vel=%.3frs  voltage=%.1f",
@@ -395,7 +395,7 @@ public class DriveBase extends SubsystemBase
     modulePositions[2] = m_backLeftModule.getFieldPosition();
     modulePositions[3] = m_backRightModule.getFieldPosition();
     
-    m_odometry.update(getHeadingRotation2d(), modulePositions);
+    m_odometry.update(getGyroAngleRotation2d(), modulePositions);
 
     // Track the distance traveled by robot to support simulation of
     // a regular encoder. We do this by looking at the change in robot
@@ -448,7 +448,7 @@ public class DriveBase extends SubsystemBase
         .plus(getRobotPose().getTranslation());
     
     module.setModulePose(
-        new Pose2d(modulePosition, module.getHeadingRotation2d().plus(getHeadingRotation2d())));
+        new Pose2d(modulePosition, module.getHeadingRotation2d().plus(getGyroAngleRotation2d())));
   }
 
   /**
@@ -493,7 +493,9 @@ public class DriveBase extends SubsystemBase
    */
   public void setOdometry(Pose2d pose) 
   {
-    // TODO: This is the old way of doing it (pre-2023).
+    Util.consoleLog("Pose: x=%.3f  y=%.3f  rot=%.2f deg", pose.getX(), pose.getY(), pose.getRotation().getDegrees());
+
+    // This is the old way of doing it (pre-2023).
     //m_odometry.resetPosition(pose, pose.getRotation());
 
     modulePositions[0] = m_frontLeftModule.getFieldPosition();
@@ -504,7 +506,11 @@ public class DriveBase extends SubsystemBase
     // TODO: The first parameter is gyro angle but found success using the
     // pose angle, but this may not be the correct way to do this now that
     // odometry is using position instead of velocity (as of 2023).
-    m_odometry.resetPosition(pose.getRotation(), modulePositions, pose);
+
+    //m_odometry.resetPosition(pose.getRotation(), modulePositions, pose);
+    
+    // TODO: Try this when robot running again.
+    m_odometry.resetPosition(getGyroAngleRotation2d(), modulePositions, pose);
 
     lastPose = pose;
 
