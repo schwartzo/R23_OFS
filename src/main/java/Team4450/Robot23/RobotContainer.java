@@ -6,6 +6,10 @@ import static Team4450.Robot23.Constants.*;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import Team4450.Lib.CameraFeed;
 import Team4450.Lib.XboxController;
 import Team4450.Lib.MonitorCompressor;
@@ -34,6 +38,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -93,7 +98,8 @@ public class RobotContainer
     private CameraFeed			cameraFeed;
     
 	// Trajectories.
-    public static Trajectory    testTrajectory;
+    public static Trajectory    		testTrajectory;
+	public static PathPlannerTrajectory	ppTestTrajectory;
 
     // List of autonomous programs. Any change here must be reflected in getAutonomousCommand()
     // and setAutoChoices() which appear later in this class.
@@ -262,9 +268,19 @@ public class RobotContainer
         // Load any trajectory files in a separate thread on first scheduler run.
         // We do this because trajectory loads can take up to 10 seconds to load so we want this
         // being done while we are getting started up. Hopefully will complete before we are ready to
-        // use the trajectory. See Robot22B2 for example of how to do this.
+        // use the trajectory.
+		
+		NotifierCommand loadTrajectory = new NotifierCommand(this::loadTestTrajectory, 0);
+        loadTrajectory.setRunWhenDisabled(true);
+        CommandScheduler.getInstance().schedule(loadTrajectory);
+		
+		//testTrajectory = loadTrajectoryFile("Slalom-1.wpilib.json");
+		
+		loadTrajectory = new NotifierCommand(this::loadPPTestTrajectory, 0);
+        loadTrajectory.setRunWhenDisabled(true);
+        CommandScheduler.getInstance().schedule(loadTrajectory);
 
-		testTrajectory = loadTrajectoryFile("Slalom-1.wpilib.json");
+		//PathPlannerTrajectory ppTestTrajectory = loadPPTrajectoryFile("richard");
 	}
 
 	/**
@@ -455,6 +471,7 @@ public class RobotContainer
           
           trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryFilePath);
         } catch (IOException ex) {
+		  Util.consoleLog("Unable to open trajectory: " + ex.toString());
           throw new RuntimeException("Unable to open trajectory: " + ex.toString());
         }
 
@@ -462,5 +479,44 @@ public class RobotContainer
 
         return trajectory;
     }
+         
+	private void loadTestTrajectory()
+	{
+		testTrajectory = loadTrajectoryFile("Slalom-1.wpilib.json");
+	}
 
+	/**
+     * Loads a PathPlanner path file into a path planner trajectory.
+     * @param fileName Name of file. Will automatically look in deploy directory and add the .path ext.
+     * @return The path's trajectory.
+     */
+    public static PathPlannerTrajectory loadPPTrajectoryFile(String fileName)
+    {
+        PathPlannerTrajectory  	trajectory;
+        Path        			trajectoryFilePath;
+
+		// We fab up the full path for tracing but the loadPath() function does it's own
+		// thing constructing a path from just the filename.
+		trajectoryFilePath = Filesystem.getDeployDirectory().toPath().resolve("pathplanner/" + fileName + ".path");
+
+		Util.consoleLog("loading PP trajectory: %s", trajectoryFilePath);
+		
+		trajectory = PathPlanner.loadPath(fileName,
+										  new PathConstraints(MAX_WHEEL_SPEED, MAX_WHEEL_ACCEL));
+
+		if (trajectory == null) 
+		{
+			Util.consoleLog("Unable to open pp trajectory: " + fileName);
+			throw new RuntimeException("Unable to open PP trajectory: " + fileName);
+		}
+
+        Util.consoleLog("PP trajectory loaded: %s", fileName);
+
+        return trajectory;
+    }
+
+	private void loadPPTestTrajectory()
+	{
+		ppTestTrajectory = loadPPTrajectoryFile("Test-Path");
+	}
 }

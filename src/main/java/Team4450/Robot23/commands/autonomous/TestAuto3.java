@@ -105,8 +105,8 @@ public class TestAuto3 extends CommandBase
                                         startingPose,
                                         // Pass through these two interior waypoints, making an 's' curve path
                                         List.of(
-                                            new Translation2d(startingPose.getX() - 3, startingPose.getY() - 1),
-                                            new Translation2d(startingPose.getX() - 6, startingPose.getY() + 1)
+                                            new Translation2d(startingPose.getX() + 3, startingPose.getY() + 1),
+                                            new Translation2d(startingPose.getX() + 6, startingPose.getY() - 1)
                                         ),
                                         // End 9 meters straight ahead of where we started, facing forward
                                         new Pose2d(startingPose.getX() - 9, startingPose.getY(), startingPose.getRotation()),
@@ -130,8 +130,9 @@ public class TestAuto3 extends CommandBase
         //                                 config);		
         
 
-        command = new AutoDriveTrajectory(driveBase, exampleTrajectory, StopMotors.stop, Brakes.on);
+        //command = new AutoDriveTrajectory(driveBase, exampleTrajectory, StopMotors.stop, Brakes.on);
         //command = new AutoDriveTrajectory(driveBase, RobotContainer.testTrajectory, StopMotors.stop, Brakes.on);
+		command = new AutoDriveTrajectory(driveBase, RobotContainer.ppTestTrajectory, StopMotors.stop, Brakes.on);
 		
 		commands.addCommands(command);
 		

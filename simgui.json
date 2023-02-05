@@ -18,8 +18,8 @@
       },
       "/SmartDashboard/Field2d": {
         "Robot": {
-          "length": 0.4749999940395355,
-          "width": 0.4749999940395355
+          "length": 0.9143999814987183,
+          "width": 0.6096000075340271
         },
         "Swerve Modules": {
           "image": "resources/swerve_module.png",
