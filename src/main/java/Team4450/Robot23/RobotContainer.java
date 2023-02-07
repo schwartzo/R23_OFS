@@ -21,6 +21,7 @@ import Team4450.Robot23.commands.SetToStartPositionCommand;
 import Team4450.Robot23.commands.Utility.NotifierCommand;
 import Team4450.Robot23.commands.autonomous.TestAuto1;
 import Team4450.Robot23.commands.autonomous.TestAuto3;
+import Team4450.Robot23.commands.autonomous.TestAuto4;
 import Team4450.Robot23.subsystems.DriveBase;
 import Team4450.Robot23.subsystems.ShuffleBoard;
 
@@ -107,7 +108,8 @@ public class RobotContainer
 	{
 		NoProgram,
 		TestAuto1,
-		TestAuto3
+		TestAuto3,
+		TestAuto4
 	}
 
 	public static Pose2d	defaultStartingPose;
@@ -381,6 +383,10 @@ public class RobotContainer
 			case TestAuto3:
 			 	autoCommand = new TestAuto3(driveBase, startingPose);
 			 	break;
+ 				
+			case TestAuto4:
+			 	autoCommand = new TestAuto4(driveBase, startingPose);
+			 	break;
 		}
         
 		return autoCommand;
@@ -400,6 +406,7 @@ public class RobotContainer
 		//autoChooser.addOption("Test Auto 1", AutoProgram.TestAuto1);		
 		autoChooser.setDefaultOption("Test Auto 1", AutoProgram.TestAuto1);		
 		autoChooser.addOption("Test Auto 3", AutoProgram.TestAuto3);		
+		autoChooser.addOption("Test Auto 4", AutoProgram.TestAuto4);		
 				
 		SmartDashboard.putData(autoChooser);
 	}

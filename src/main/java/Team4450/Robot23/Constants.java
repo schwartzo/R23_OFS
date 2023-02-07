@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "ORF23-02.02.23-1";
+	public static String		PROGRAM_NAME = "ORF23-02.06.23-1";
 
 	public static Robot			robot;
 
@@ -37,7 +37,9 @@ public final class Constants
 	    
 	// Non-drive base motor controller port assignments
 
-    public static int           REV_PDB = 20;
+    public static final int     CLAW_MOTOR = 13;
+    public static final int     WINCH_MOTOR = 14;
+    public static final int     REV_PDB = 20;
 	
 	// GamePad port assignments.
 	public static final int		DRIVER_PAD = 0, UTILITY_PAD = 1;
@@ -93,6 +95,8 @@ public final class Constants
      * Should be measured from center to center.
      */
     public static final double DRIVETRAIN_WHEELBASE_METERS = .475; // Measure and set wheelbase
+
+    // Swerve Module motor controller & encoder port assignments and steering offset.
 
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; // Set front left module drive motor ID
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 2; //  Set front left module steer motor ID

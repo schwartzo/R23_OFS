@@ -1,15 +1,16 @@
 Port and Button Assignments.
 
-CAN Ports
+CTRE CAN Ports
 Port	Device			Description
 -----------------------------------------------------------------------------------
 3       CanCoder        LF CanCoder.
 6       CanCoder        RF CanCoder.
 9       CanCoder        LR CanCoder.
 12      CanCoder        RR CanCoder.
+13      TalonFX         Claw motor.
 
 
-SparkMax Ports
+SparkMax CAN Ports
 Port	Device			Description
 -----------------------------------------------------------------------------------
 1       SparkMax        LF drive motor.
@@ -20,6 +21,7 @@ Port	Device			Description
 8       SparkMax        LR steer motor.
 10      SparkMax        RR drive motor.
 11      SparkMax        RR steer motor.
+14      SparkMax        Winch motor.
 
 
 PWM Ports
