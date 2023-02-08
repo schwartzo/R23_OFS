@@ -48,6 +48,9 @@ Port	Device blk-pos	Description
 Digital I/O Ports
 Port	Device			Description
 -----------------------------------------------------------------------------------
+0       Limit Switch    Winch reset.
+1       Limit Switch    CIB reset.
+2       Limit Switch    Claw reset.
 
 
 Analog I/O Ports

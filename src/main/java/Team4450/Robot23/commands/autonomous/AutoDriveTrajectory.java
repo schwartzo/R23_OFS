@@ -73,10 +73,10 @@ public class AutoDriveTrajectory extends SwerveControllerCommand
         
         super.initialize();
 
-        // if (brakes == Brakes.on)
-        //     driveBase.SetCANTalonBrakeMode(true);
-        // else
-        //     driveBase.SetCANTalonBrakeMode(false);
+        if (brakes == Brakes.on)
+            driveBase.setBrakeMode(true);
+        else
+            driveBase.setBrakeMode(false);
 
         // Set the current robot pose to match the starting pose of the trajectory. If all of your
         // autonomouse moves are correctly coordinated the starting pose of the trajectory should

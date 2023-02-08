@@ -336,6 +336,24 @@ public class DriveBase extends SubsystemBase
   }
 
   /**
+   * Drive the robot with a chassis speeds object instead of module states. This method
+   * is intended to support the PathPlanner swerve controller command.
+   * @param speeds Speeds output by PPSwerveControllerCommand.
+   */
+  public void setSpeeds(ChassisSpeeds speeds)
+  {
+    Util.consoleLog("vxt=%.4f  vys=%.4f  vr=%.4f", speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 
+                                                   speeds.omegaRadiansPerSecond);
+    
+    m_chassisSpeeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 
+                                        speeds.omegaRadiansPerSecond * -1);
+    
+    SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
+
+    setModuleStates(states);
+  }
+
+  /**
    * Set the swerve modules to their desired states;
    * @param desiredStates Array of module states.
    */
@@ -733,8 +751,26 @@ public class DriveBase extends SubsystemBase
     drive(0, 0, 0);
   }
 
+  /**
+   * Returns the swerve drive kinematics object.
+   * @return The swerve kinematics object.
+   */
   public static SwerveDriveKinematics getKinematics()
   {
     return m_kinematics;
+  }
+
+  /**
+   * Set drive motor idle mode for each swerve module. Defaults to brake.
+   * @param on True to set idle mode to brake, false sets to coast.
+   */
+  public void setBrakeMode(boolean on) 
+  {
+      Util.consoleLog();
+    
+      // m_frontLeftModule.setBrakeMode(on); 
+      // m_frontRightModule.setBrakeMode(on); 
+      // m_backLeftModule.setBrakeMode(on); 
+      // m_backRightModule.setBrakeMode(on); 
   }
 }

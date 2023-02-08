@@ -70,10 +70,10 @@ public class AutoDriveProfiled extends ProfiledPIDCommand
 
         startTime = Util.timeStamp();
 
-        // if (brakes == Brakes.on)
-        //     driveBase.SetCANTalonBrakeMode(true);
-        // else
-        //     driveBase.SetCANTalonBrakeMode(false);
+        if (brakes == Brakes.on)
+            driveBase.setBrakeMode(true);
+        else
+            driveBase.setBrakeMode(false);
         
         driveBase.resetDistanceTraveled();
         

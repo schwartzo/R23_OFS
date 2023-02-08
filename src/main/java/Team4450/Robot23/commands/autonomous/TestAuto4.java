@@ -9,8 +9,6 @@ import Team4450.Robot23.subsystems.DriveBase;
 
 import static Team4450.Robot23.Constants.*;
 
-import java.util.List;
-
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -21,9 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -86,7 +81,12 @@ public class TestAuto4 extends CommandBase
 			
 		// Target heading should be the same.
 		RobotContainer.navx.setTargetHeading(startingPose.getRotation().getDegrees());
-		
+			
+		// Reset odometry tracking with initial x,y position and heading (set above) specific to this 
+		// auto routine. Robot must be placed in same starting location each time for pose tracking
+		// to work.
+		driveBase.setOdometry(startingPose);
+
 		// Since a typical autonomous program consists of multiple actions, which are commands
 		// in this style of programming, we will create a list of commands for the actions to
 		// be taken in this auto program and add them to a sequential command list to be 
@@ -94,48 +94,18 @@ public class TestAuto4 extends CommandBase
 		
 		commands = new SequentialCommandGroup();
 		
-		// NOTE: Here we run into the differencec between X/Y axis definitions between
-		// joystick axes and field axes. JS is Y fwd/back down the field and X is left/right
-		// paralell to the driver station wall. In the WPILib code, it is opposite. Note that
+		// NOTE: Here we run into the difference of X/Y axis definitions between
+		// joystick axes and field axes. JS is Y fwd/back (down the field) and X is left/right
+		// (paralell to the driver station wall). In the WPILib code, it is opposite. Note that
 		// in the drive command we switch the JS axes to fix this issue before passing to the
 		// swerve code. Here we are dealing directly with swerve drive code so X is fwd/back
 		// down the field and Y is left/right (strafe).
 
-        // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        //                                 // Start at the origin set above
-        //                                 startingPose,
-        //                                 // Pass through these two interior waypoints, making an 's' curve path
-        //                                 List.of(
-        //                                     new Translation2d(startingPose.getX() + 3, startingPose.getY() + 1),
-        //                                     new Translation2d(startingPose.getX() + 6, startingPose.getY() - 1)
-        //                                 ),
-        //                                 // End 9 meters straight ahead of where we started, facing forward
-        //                                 new Pose2d(startingPose.getX() - 9, startingPose.getY(), startingPose.getRotation()),
-        //                                 // Pass config
-        //                                 config);		
-        
         PathPlannerTrajectory exampleTrajectory = PathPlanner.generatePath(
-            new PathConstraints(4, 3), 
-            new PathPoint(new Translation2d(1.0, 1.0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)), 
-            new PathPoint(new Translation2d(3.0, 3.0), Rotation2d.fromDegrees(45), Rotation2d.fromDegrees(-90)), 
-            new PathPoint(new Translation2d(5.0, 3.0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(-30)) 
+            new PathConstraints(MAX_WHEEL_SPEED, MAX_WHEEL_ACCEL), 
+			new PathPoint(new Translation2d(startingPose.getX(), startingPose.getY()), startingPose.getRotation(), startingPose.getRotation()),
+            new PathPoint(new Translation2d(1.0, 1.0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)) 
         );
-
-        // Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        //                                 // Start at the origin set above
-        //                                 startingPose,
-        //                                 // Pass through these interior waypoints
-        //                                 List.of(
-        //                                     new Translation2d(startingPose.getX() + 1, startingPose.getY()),
-        //                                     new Translation2d(startingPose.getX() + 1.5, startingPose.getY() + .5),
-        //                                     new Translation2d(startingPose.getX() + 2.0, startingPose.getY() + 1.0),
-        //                                     new Translation2d(startingPose.getX() + 1.5, startingPose.getY() + 1.5),
-        //                                     new Translation2d(startingPose.getX() + 1, startingPose.getY() + 2.0)
-        //                                     ),
-        //                                 // End back where we started but left 2m, facing 180 from start.
-        //                                 new Pose2d(startingPose.getX(), startingPose.getY() + 2.0, new Rotation2d(Math.toRadians(180))),
-        //                                 // Pass config
-        //                                 config);		
         
 		command = new AutoDrivePPTrajectory(driveBase, exampleTrajectory, StopMotors.stop, Brakes.on);
 		//command = new AutoDrivePPTrajectory(driveBase, RobotContainer.ppTestTrajectory, StopMotors.stop, Brakes.on);

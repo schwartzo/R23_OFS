@@ -21,7 +21,7 @@ public class AutoDrivePPTrajectory extends PPSwerveControllerCommand
 {
     private static double   kPX = 1.0, kIX = kPX / 100, kDX = 0, startTime;
     private static double   kPY = 1.0, kIY = kPY / 100, kDY = 0;
-    private static double   kPR = 1.0, KIR = kPR / 100, KDR = 0;
+    private static double   kPR = 0.25, KIR = kPR / 100, KDR = 0;
     private int             iterations;
 
     private DriveBase               driveBase;
@@ -40,11 +40,12 @@ public class AutoDrivePPTrajectory extends PPSwerveControllerCommand
     {
         super(trajectory,
             driveBase::getRobotPose, 
-            DriveBase.getKinematics(),
+            //DriveBase.getKinematics(),
             new PIDController(kPX, 0, 0),
             new PIDController(kPY, 0, 0),
             new PIDController(kPR, 0, 0),
-            driveBase::setModuleStates,
+            driveBase::setSpeeds,
+            //driveBase::setModuleStates,
             false);
 
         this.driveBase = driveBase;
@@ -62,10 +63,10 @@ public class AutoDrivePPTrajectory extends PPSwerveControllerCommand
         
         super.initialize();
 
-        // if (brakes == Brakes.on)
-        //     driveBase.SetCANTalonBrakeMode(true);
-        // else
-        //     driveBase.SetCANTalonBrakeMode(false);
+        if (brakes == Brakes.on)
+            driveBase.setBrakeMode(true);
+        else
+            driveBase.setBrakeMode(false);
 
         // Set the current robot pose to match the starting pose of the trajectory. If all of your
         // autonomouse moves are correctly coordinated the starting pose of the trajectory should

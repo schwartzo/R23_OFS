@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "ORF23-02.06.23-1";
+	public static String		PROGRAM_NAME = "ORF23-02.08.23-1";
 
 	public static Robot			robot;
 
@@ -48,6 +48,9 @@ public final class Constants
 	//public static final int		COMPRESSOR = 0;
 
 	// Digital Input port assignments. Encoder takes 2 ports.
+    public static final int     WINCH_SWITCH = 0;
+    public static final int     CIB_SWITCH = 1;
+    public static final int     CLAW_SWITCH = 2;     
 	  
 	// Analog Input port assignments.
 	
