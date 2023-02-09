@@ -4,6 +4,7 @@ package Team4450.Robot23;
 import java.util.Arrays;
 import java.util.Properties;
 
+import Team4450.Lib.Util;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -82,7 +83,7 @@ public final class Constants
     // Slew is rate of change per second in whatever unit you are using.
     // We are doing % stick input so unit is 100% or 1. So a slew of i is
     // ramp to 1 (100% power) in 1 second. So a slew of 3 is 3 units per
-    // second or 1 unit in 1/3 second. So larger slew is faster slew to
+    // second or 1 unit in 1/3 second. So larger slew is faster ramp to
     // 100%. 1.5 is 100% in 3/4 second. 2 is 100% in 1/2 second.
     public static final double  THROTTLE_SLEW = 1.5;        
     public static final double  ROTATION_SLEW = 3.0;  //3.0;
@@ -91,35 +92,38 @@ public final class Constants
      * The left-to-right distance between the drivetrain wheels
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = .475; //  Measure and set trackwidth
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = Util.inchesToMeters(30.75); //  Measure and set trackwidth
    
+    // NOTE: We had to swap the track width and wheel base numbers to get rectangular robot
+    // to drive correctly.
+
     /**
      * The front-to-back distance between the drivetrain wheels.
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = .475; // Measure and set wheelbase
+    public static final double DRIVETRAIN_WHEELBASE_METERS = Util.inchesToMeters(18.75); // Measure and set wheelbase
 
     // Swerve Module motor controller & encoder port assignments and steering offset.
 
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; // Set front left module drive motor ID
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 2; //  Set front left module steer motor ID
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 3; //  Set front left steer encoder ID
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(145.0); //  Measure and set front left steer offset
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(301.113); //  Measure and set front left steer offset
 
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 4; //  Set front right drive motor ID
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 5; //  Set front right steer motor ID
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 6; //  Set front right steer encoder ID
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(70.0); //  Measure and set front right steer offset
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(238.096); //  Measure and set front right steer offset
 
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7; //  Set back left drive motor ID
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = 8; //  Set back left steer motor ID
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 9; //  Set back left steer encoder ID
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(58.0); //  Measure and set back left steer offset
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(556.195); //  Measure and set back left steer offset
 
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 10; //  Set back right drive motor ID
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 11; //  Set back right steer motor ID
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 12; //  Set back right steer encoder ID
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(123.0); //  Measure and set back right steer offset
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(157.764); //  Measure and set back right steer offset
     
 	// Use these values in PathWeaver for speed and acceleration.
     // Robot will go faster than this, more like 3.6 mps but this value tones down autonomous speed.

@@ -101,10 +101,14 @@ public class TestAuto4 extends CommandBase
 		// swerve code. Here we are dealing directly with swerve drive code so X is fwd/back
 		// down the field and Y is left/right (strafe).
 
+		double spx = startingPose.getX();
+		double spy = startingPose.getY();
+
         PathPlannerTrajectory exampleTrajectory = PathPlanner.generatePath(
             new PathConstraints(MAX_WHEEL_SPEED, MAX_WHEEL_ACCEL), 
-			new PathPoint(new Translation2d(startingPose.getX(), startingPose.getY()), startingPose.getRotation(), startingPose.getRotation()),
-            new PathPoint(new Translation2d(1.0, 1.0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)) 
+			new PathPoint(new Translation2d(spx, spy), startingPose.getRotation(), startingPose.getRotation()),
+            new PathPoint(new Translation2d(spx += 1, spy += 1), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(90)), 
+            new PathPoint(new Translation2d(spx += 2, spy += 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)) 
         );
         
 		command = new AutoDrivePPTrajectory(driveBase, exampleTrajectory, StopMotors.stop, Brakes.on);

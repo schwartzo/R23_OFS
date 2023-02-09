@@ -30,7 +30,7 @@
     },
     "###/SmartDashboard/Field2d": {
       "Collapsed": "0",
-      "Pos": "404,35",
+      "Pos": "404,33",
       "Size": "1054,565"
     },
     "###/SmartDashboard/Gyro2": {
@@ -60,7 +60,7 @@
     },
     "###Other Devices": {
       "Collapsed": "0",
-      "Pos": "1522,29",
+      "Pos": "1522,28",
       "Size": "375,1042"
     },
     "###System Joysticks": {

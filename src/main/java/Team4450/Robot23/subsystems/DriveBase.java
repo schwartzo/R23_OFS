@@ -345,9 +345,14 @@ public class DriveBase extends SubsystemBase
     Util.consoleLog("vxt=%.4f  vys=%.4f  vr=%.4f", speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 
                                                    speeds.omegaRadiansPerSecond);
     
-    m_chassisSpeeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 
-                                        speeds.omegaRadiansPerSecond * -1);
-    
+    // Again with need to invert rotation under sim for some reason...
+
+    if (RobotBase.isSimulation())
+      m_chassisSpeeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 
+                                          speeds.omegaRadiansPerSecond * -1);
+    else
+      m_chassisSpeeds = speeds;
+
     SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(m_chassisSpeeds);
 
     setModuleStates(states);
