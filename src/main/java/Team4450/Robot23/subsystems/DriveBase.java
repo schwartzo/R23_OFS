@@ -68,17 +68,17 @@ public class DriveBase extends SubsystemBase
 
   // Here we calculate the theoretical maximum angular velocity. You can also replace this with a measured amount.
   public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
-          Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
+          Math.hypot(DRIVETRAIN_WHEELBASE_METERS / 2.0, DRIVETRAIN_TRACKWIDTH_METERS / 2.0);
           
   private static final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
           // Front left
-          new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
+          new Translation2d(DRIVETRAIN_WHEELBASE_METERS / 2.0, DRIVETRAIN_TRACKWIDTH_METERS / 2.0),
           // Front right
-          new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0),
+          new Translation2d(DRIVETRAIN_WHEELBASE_METERS / 2.0, -DRIVETRAIN_TRACKWIDTH_METERS / 2.0),
           // Back left
-          new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
+          new Translation2d(-DRIVETRAIN_WHEELBASE_METERS / 2.0, DRIVETRAIN_TRACKWIDTH_METERS / 2.0),
           // Back right
-          new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0)
+          new Translation2d(-DRIVETRAIN_WHEELBASE_METERS / 2.0, -DRIVETRAIN_TRACKWIDTH_METERS / 2.0)
   );
 
   // The important thing about how you configure your gyroscope is that rotating the robot counter-clockwise should
@@ -238,7 +238,7 @@ public class DriveBase extends SubsystemBase
     resetModuleEncoders();
 
     // Set default starting position on field.
-    setOdometry(RobotContainer.defaultStartingPose);
+    setOdometry(DEFAULT_STARTING_POSE);
 
     // Initialze drive code by issuing a no movement drive command.
     drive(0, 0, 0);
@@ -345,7 +345,7 @@ public class DriveBase extends SubsystemBase
     Util.consoleLog("vxt=%.4f  vys=%.4f  vr=%.4f", speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 
                                                    speeds.omegaRadiansPerSecond);
     
-    // Again with need to invert rotation under sim for some reason...
+    // Again with the need to invert rotation under sim for some reason...
 
     if (RobotBase.isSimulation())
       m_chassisSpeeds = new ChassisSpeeds(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, 

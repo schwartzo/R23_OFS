@@ -15,6 +15,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -103,16 +104,17 @@ public class TestAuto4 extends CommandBase
 
 		double spx = startingPose.getX();
 		double spy = startingPose.getY();
+		Rotation2d spr = startingPose.getRotation();
 
-        PathPlannerTrajectory exampleTrajectory = PathPlanner.generatePath(
-            new PathConstraints(MAX_WHEEL_SPEED, MAX_WHEEL_ACCEL), 
-			new PathPoint(new Translation2d(spx, spy), startingPose.getRotation(), startingPose.getRotation()),
-            new PathPoint(new Translation2d(spx += 1, spy += 1), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(90)), 
-            new PathPoint(new Translation2d(spx += 2, spy += 0), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(0)) 
-        );
-        
-		command = new AutoDrivePPTrajectory(driveBase, exampleTrajectory, StopMotors.stop, Brakes.on);
-		//command = new AutoDrivePPTrajectory(driveBase, RobotContainer.ppTestTrajectory, StopMotors.stop, Brakes.on);
+		PathPlannerTrajectory exampleTrajectory = PathPlanner.generatePath(
+				new PathConstraints(MAX_WHEEL_SPEED, MAX_WHEEL_ACCEL), 
+				new PathPoint(new Translation2d(spx, spy), spr, spr),
+				new PathPoint(new Translation2d(spx += 1, spy += 1), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(90)), 
+				new PathPoint(new Translation2d(spx += 1, spy += 0), Rotation2d.fromDegrees(0), spr) 
+	        );
+	
+		//command = new AutoDrivePPTrajectory(driveBase, exampleTrajectory, StopMotors.stop, Brakes.on);
+		command = new AutoDrivePPTrajectory(driveBase, RobotContainer.ppTestTrajectory, StopMotors.stop, Brakes.on);
 		
 		commands.addCommands(command);
 		

@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import pabeles.concurrency.IntObjectConsumer;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -24,7 +25,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "ORF23-02.08.23-1";
+	public static String		PROGRAM_NAME = "ORF23-02.10.23-1";
 
 	public static Robot			robot;
 
@@ -38,8 +39,9 @@ public final class Constants
 	    
 	// Non-drive base motor controller port assignments
 
-    public static final int     CLAW_MOTOR = 13;
-    public static final int     WINCH_MOTOR = 14;
+    public static final int     CLAW_MOTOR = 15;
+    public static final int     WINCH_MOTOR = 13;
+    public static final Int     CIB_MOTOR = 14;
     public static final int     REV_PDB = 20;
 	
 	// GamePad port assignments.
@@ -57,7 +59,7 @@ public final class Constants
 	
 	// LCD display line number constants showing class where the line is set.
 	public static final int		LCD_1 = 1;	    // Robot, Auto Commands.
-	public static final int		LCD_2 = 2;	    // Serve Drive command.
+	public static final int		LCD_2 = 2;	    // Swerve Drive command.
 	public static final int		LCD_3 = 3;	    // ShuffleBoard subsystem.
 	public static final int		LCD_4 = 4;	    // ShuffleBoard subsystem.
 	public static final int		LCD_5 = 5;	    // Autonomous commands.
@@ -66,9 +68,8 @@ public final class Constants
 	public static final int		LCD_9 = 9;	    // ShuffleBoard subsystem.
 	public static final int		LCD_10 = 10;	// ShuffleBoard subsystem.
 
-	// Default starting field position in meters for pose tracking. For full field lower left corner.
-	public static final Pose2d	BLUE_DEFAULT_STARTING_POSE = new Pose2d(2.703, 2.797, new Rotation2d(0));
-	public static final Pose2d	RED_DEFAULT_STARTING_POSE = new Pose2d(14, 2.797, new Rotation2d(Math.toRadians(180)));
+	// Default starting field position in meters for pose tracking.
+	public static final Pose2d	DEFAULT_STARTING_POSE = new Pose2d(2.610, 2.847, new Rotation2d(0));
     
 	// Next group of constants are for Swerve drive.
 
@@ -92,18 +93,15 @@ public final class Constants
      * The left-to-right distance between the drivetrain wheels
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = Util.inchesToMeters(30.75); //  Measure and set trackwidth
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = Util.inchesToMeters(18.75); //  Measure and set trackwidth
    
-    // NOTE: We had to swap the track width and wheel base numbers to get rectangular robot
-    // to drive correctly.
-
     /**
      * The front-to-back distance between the drivetrain wheels.
      * Should be measured from center to center.
      */
-    public static final double DRIVETRAIN_WHEELBASE_METERS = Util.inchesToMeters(18.75); // Measure and set wheelbase
+    public static final double DRIVETRAIN_WHEELBASE_METERS = Util.inchesToMeters(30.75); // Measure and set wheelbase
 
-    // Swerve Module motor controller & encoder port assignments and steering offset.
+    // Swerve Module motor controller & encoder port assignments and steering offsets.
 
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 1; // Set front left module drive motor ID
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 2; //  Set front left module steer motor ID
@@ -126,7 +124,7 @@ public final class Constants
     public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(157.764); //  Measure and set back right steer offset
     
 	// Use these values in PathWeaver for speed and acceleration.
-    // Robot will go faster than this, more like 3.6 mps but this value tones down autonomous speed.
+    // Robot will go faster than this, more like 3 mps but this value tones down autonomous speed.
 
     public static final double  MAX_WHEEL_SPEED = 2.0;     // Meters per second.
     public static final double  MAX_WHEEL_ACCEL = 1.0;     // Meters per second per second.
@@ -139,16 +137,16 @@ public final class Constants
     // Drive base characterization results. These values from 2021 as placeholders until 202?
 	// characterization is done.
 
-    //public static final double  TRACK_WIDTH_C = Util.inchesToMeters(TRACK_WIDTH);	// Meters.
+    //public static final double  TRACK_WIDTH_C = Util.inchesToMeters(DRIVETRAIN_TRACKWIDTH_METERS); // Meters.
 
-    public static final double  DB_KS = 1.74;
-    public static final double  DB_KV = 1.8;
-    public static final double  DB_KA = .422;
+    // public static final double  DB_KS = 1.74;
+    // public static final double  DB_KV = 1.8;
+    // public static final double  DB_KA = .422;
 
-    public static final double  DB_POSITIONAL_KP = .0688; 
-    public static final double  DB_POSITIONAL_KD = 36.5; 
-    public static final double  DB_VELOCITY_KP = .12;  
-    public static final double  DB_VELOCITY_KD = 0.0;
+    // public static final double  DB_POSITIONAL_KP = .0688; 
+    // public static final double  DB_POSITIONAL_KD = 36.5; 
+    // public static final double  DB_VELOCITY_KP = .12;  
+    // public static final double  DB_VELOCITY_KD = 0.0;
 
     private final AprilTagFieldLayout aprlFieldLayout = new AprilTagFieldLayout(Arrays.asList(
     new AprilTag(1, new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters( 42.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, Math.PI))),
@@ -160,4 +158,7 @@ public final class Constants
     new AprilTag(7, new Pose3d(Units.inchesToMeters( 40.45), Units.inchesToMeters(108.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, 0.0))),
     new AprilTag(8, new Pose3d(Units.inchesToMeters( 40.45), Units.inchesToMeters( 42.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, 0.0)))
   ), Units.inchesToMeters(651.25), Units.inchesToMeters(315.5));
+
+  //-------------------- No student code above this line ------------------------------------------------------
+
 }

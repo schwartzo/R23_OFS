@@ -89,25 +89,25 @@ public class TestAuto1 extends CommandBase
 		
 		commands = new SequentialCommandGroup();
 		
-		// First action is to drive forward 3 meters and stop. Note Brakes not currently implemented.
+		// First action is to drive forward 1 meters and stop. Note Brakes not currently implemented.
 		
 		command = new AutoDriveProfiled(driveBase, 1, StopMotors.stop, Brakes.on);
 		
 		commands.addCommands(command);
 		
-		// Next action is to drive backward 3 meters and stop. Note Brakes not currently implemented.
+		// Next action is to drive backward 1 meters and stop. Note Brakes not currently implemented.
 		
 		command = new AutoDriveProfiled(driveBase, -1, StopMotors.stop, Brakes.on);
 		
 		commands.addCommands(command);
 
-		// Now strafe left 3 meters.
+		// Now strafe left 1 meters.
 
 		command = new AutoStrafeProfiled(driveBase, 1, StopMotors.stop, Brakes.on);
 		
 		commands.addCommands(command);
 
-		// Now strafe right 3 meters.
+		// Now strafe right 1 meters.
 
 		command = new AutoStrafeProfiled(driveBase, -1, StopMotors.stop, Brakes.on);
 		
@@ -131,7 +131,8 @@ public class TestAuto1 extends CommandBase
 
 		commands.addCommands(command);
 
-		command = new AutoDrive(driveBase, .75, 2.0, StopMotors.stop, Brakes.on, Pid.on);
+		// Now drive ahead 1 meter.
+		command = new AutoDrive(driveBase, .50, 1.0, StopMotors.stop, Brakes.on, Pid.on);
 
 		commands.addCommands(command);
 

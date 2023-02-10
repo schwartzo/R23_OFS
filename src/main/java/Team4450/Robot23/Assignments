@@ -7,7 +7,7 @@ Port	Device			Description
 6       CanCoder        RF CanCoder.
 9       CanCoder        LR CanCoder.
 12      CanCoder        RR CanCoder.
-13      TalonFX         Claw motor.
+15      TalonFX         Claw motor.
 
 
 SparkMax CAN Ports
@@ -21,8 +21,8 @@ Port	Device			Description
 8       SparkMax        LR steer motor.
 10      SparkMax        RR drive motor.
 11      SparkMax        RR steer motor.
-14      SparkMax        Winch motor.
-
+13      SparkMax        Winch motor.
+14      SparkMax        CIB motor.
 
 PWM Ports
 Port	Device			Description
@@ -111,9 +111,5 @@ Overload				boolean			True when brownout has occurred.
 Auto Program            Chooser         List of autonomous programs.
 
 
-Drive Base gearbox ratios: SDS Leve 1 for approx 9.28 f/s or 3 m/s.
+Drive Base gearbox ratios: SDS Level 1 for approx 9.28 f/s or 3 m/s.
 
-CAN Bus Map:
-
-Roborio
-PDB

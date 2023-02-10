@@ -142,15 +142,6 @@ public class RobotContainer
 			isComp = true;
 		else
 			isClone = true;
-
-		// Set default starting position based on alliance color.
-
-		if (RobotBase.isSimulation()) alliance = Alliance.Blue;
-
-		if (alliance == Alliance.Blue)
-			defaultStartingPose = BLUE_DEFAULT_STARTING_POSE;
-		else
-			defaultStartingPose = RED_DEFAULT_STARTING_POSE;
  		
 		// Set compressor enabled switch on dashboard from properties file.
 		// Later code will read that setting from the dashboard and turn 
@@ -357,7 +348,7 @@ public class RobotContainer
 	public Command getAutonomousCommand() 
 	{
 		AutoProgram		program = AutoProgram.NoProgram;
-		Pose2d			startingPose = defaultStartingPose;
+		Pose2d			startingPose = DEFAULT_STARTING_POSE;
 		Command			autoCommand = null;
 		
 		Util.consoleLog();
@@ -402,9 +393,8 @@ public class RobotContainer
 		autoChooser = new SendableChooser<AutoProgram>();
 		
 		SendableRegistry.add(autoChooser, "Auto Program");
-		//autoChooser.setDefaultOption("No Program", AutoProgram.NoProgram);
-		//autoChooser.addOption("Test Auto 1", AutoProgram.TestAuto1);		
-		autoChooser.setDefaultOption("Test Auto 1", AutoProgram.TestAuto1);		
+		autoChooser.setDefaultOption("No Program", AutoProgram.NoProgram);
+		autoChooser.addOption("Test Auto 1", AutoProgram.TestAuto1);		
 		autoChooser.addOption("Test Auto 3", AutoProgram.TestAuto3);		
 		autoChooser.addOption("Test Auto 4", AutoProgram.TestAuto4);		
 				
@@ -421,7 +411,7 @@ public class RobotContainer
 		startingPoseChooser = new SendableChooser<Pose2d>();
 		
 		SendableRegistry.add(startingPoseChooser, "Start Position");
-		startingPoseChooser.setDefaultOption("Default", defaultStartingPose);
+		startingPoseChooser.setDefaultOption("Default", DEFAULT_STARTING_POSE);
 		//startingPoseChooser.addOption("Blue 1", BLUE_1);		
 				
 		SmartDashboard.putData(startingPoseChooser);

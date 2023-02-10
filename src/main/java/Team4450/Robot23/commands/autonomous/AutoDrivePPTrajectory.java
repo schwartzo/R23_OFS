@@ -11,6 +11,8 @@ import Team4450.Robot23.commands.autonomous.AutoDriveProfiled.StopMotors;
 import Team4450.Robot23.subsystems.DriveBase;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /**
  * A command that will follow a trajectory using a PPSwerveDriveController. All of the parameters
@@ -69,7 +71,7 @@ public class AutoDrivePPTrajectory extends PPSwerveControllerCommand
             driveBase.setBrakeMode(false);
 
         // Set the current robot pose to match the starting pose of the trajectory. If all of your
-        // autonomouse moves are correctly coordinated the starting pose of the trajectory should
+        // autonomous moves are correctly coordinated the starting pose of the trajectory should
         // match the physical pose of the robot.
         
         Pose2d pose = trajectory.getInitialHolonomicPose();
