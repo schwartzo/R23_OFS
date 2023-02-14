@@ -62,6 +62,7 @@ public final class Constants
 	public static final int		LCD_3 = 3;	    // ShuffleBoard subsystem.
 	public static final int		LCD_4 = 4;	    // ShuffleBoard subsystem.
 	public static final int		LCD_5 = 5;	    // Autonomous commands.
+	public static final int		LCD_6 = 6;	    // ShuffleBoard subsystem.
 	public static final int		LCD_7 = 7;	    // ShuffleBoard subsystem.
 	public static final int		LCD_8 = 8;	    // ShuffleBoard subsystem.
 	public static final int		LCD_9 = 9;	    // ShuffleBoard subsystem.

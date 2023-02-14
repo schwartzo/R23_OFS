@@ -32,6 +32,7 @@ public class DriveClaw extends CommandBase
 
         power = Util.squareInput(power);
 
+        claw.setPower(power);
     }
 
     @Override

@@ -2,6 +2,7 @@ package Team4450.Robot23.subsystems;
 
 import Team4450.Lib.LCD;
 import Team4450.Lib.Util;
+import Team4450.Robot23.Robot;
 import Team4450.Robot23.RobotContainer;
 import Team4450.Robot23.commands.Utility.NotifierCommand;
 import static Team4450.Robot23.Constants.*;
@@ -58,6 +59,15 @@ public class ShuffleBoard extends SubsystemBase
       
         LCD.printLine(LCD_4, "pose x=%.1fm  y=%.1fm  deg=%.1f  yaw=%.1f", pose.getX(), 
                       pose.getY(), pose.getRotation().getDegrees(), RobotContainer.driveBase.getYaw());
+
+        LCD.printLine(LCD_6, "ulX=%.2f ulY=%.2f  urX=%.2f urY=%.2f", RobotContainer.utilityPad.getLeftX(),
+                      RobotContainer.utilityPad.getLeftY(), RobotContainer.utilityPad.getRightX(),
+                      RobotContainer.utilityPad.getRightY());
+
+        LCD.printLine(LCD_7, "winchEnc=%.2f winchSw=%b - armEnc=%.2f armSw=%b - clawEnc=%d clawSw=%b",
+                      RobotContainer.winch.getPosition(), RobotContainer.winch.getSwitch(),
+                      RobotContainer.arm.getPosition(), RobotContainer.arm.getSwitch(),
+                      RobotContainer.claw.getPosition(), RobotContainer.claw.getSwitch());                      
                           
         if (tracing) FunctionTracer.INSTANCE.exitFunction("ShuffleBoard.updateDS");
     }

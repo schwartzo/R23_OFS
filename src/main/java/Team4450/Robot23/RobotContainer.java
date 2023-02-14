@@ -16,15 +16,20 @@ import Team4450.Lib.MonitorCompressor;
 import Team4450.Lib.MonitorPDP;
 import Team4450.Lib.NavX;
 import Team4450.Lib.Util;
+import Team4450.Robot23.commands.DriveArm;
+import Team4450.Robot23.commands.DriveClaw;
 import Team4450.Robot23.commands.DriveCommand;
+import Team4450.Robot23.commands.DriveWinch;
 import Team4450.Robot23.commands.SetToStartPositionCommand;
 import Team4450.Robot23.commands.Utility.NotifierCommand;
 import Team4450.Robot23.commands.autonomous.TestAuto1;
 import Team4450.Robot23.commands.autonomous.TestAuto3;
 import Team4450.Robot23.commands.autonomous.TestAuto4;
+import Team4450.Robot23.subsystems.Arm;
+import Team4450.Robot23.subsystems.Claw;
 import Team4450.Robot23.subsystems.DriveBase;
 import Team4450.Robot23.subsystems.ShuffleBoard;
-
+import Team4450.Robot23.subsystems.Winch;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -55,10 +60,11 @@ public class RobotContainer
 
 	public static ShuffleBoard	shuffleBoard;
 	public static DriveBase 	driveBase;
+	public static Winch			winch;
+	public static Arm			arm;
+	public static Claw			claw;
 
 	// Subsystem Default Commands.
-
-	//private final TankDrive		driveCommand;
 
     // Persistent Commands.
 
@@ -182,6 +188,9 @@ public class RobotContainer
 
 		shuffleBoard = new ShuffleBoard();
 		driveBase = new DriveBase();
+		winch = new Winch();
+		arm = new Arm();
+		claw = new Claw();
 
 		// Create any persistent commands.
 
@@ -220,6 +229,12 @@ public class RobotContainer
 				() -> driverPad.getRightX(),
 				driverPad.getLeftXDS(),
 				driverPad));
+
+		winch.setDefaultCommand(new DriveWinch(winch, () -> utilityPad.getRightY()));
+
+		claw.setDefaultCommand(new DriveClaw(claw, () -> utilityPad.getRightX()));
+
+		arm.setDefaultCommand(new DriveArm(arm, () -> utilityPad.getLeftY()));
 
 		// Start the compressor, PDP and camera feed monitoring Tasks.
 
