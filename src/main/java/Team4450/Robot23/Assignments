@@ -84,11 +84,14 @@ POV_90                  Switch DS tab.
 Utility GamePad - Left Joystick
 Button Name				Function
 -----------------------------------------------------------------------------------
+Y Axis                  CIB In/Out, pull back (+) is in.
+X Axis                  Claw Open/Close, right (+) is close, left is open.
 
 
 Utility GamePad - Right Joystick
 Button Name				Function
 -----------------------------------------------------------------------------------
+Y Axis                  Winch Up/down, pull back (+) is up.
 
 
 Utility GamePad - Buttons

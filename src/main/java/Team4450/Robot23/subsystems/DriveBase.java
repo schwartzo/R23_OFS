@@ -637,23 +637,23 @@ public class DriveBase extends SubsystemBase
   /**
    * Not currently used.
    */
-  public void setModulesToAbsolute() 
-  {
-      Util.consoleLog();
+  // public void setModulesToAbsolute() 
+  // {
+  //     Util.consoleLog();
 
-      m_frontLeftModule.resetSteerAngleToAbsolute();
-      m_frontRightModule.resetSteerAngleToAbsolute();
-      m_backLeftModule.resetSteerAngleToAbsolute();
-      m_backRightModule.resetSteerAngleToAbsolute();
-  }
+  //     m_frontLeftModule.resetSteerAngleToAbsolute();
+  //     m_frontRightModule.resetSteerAngleToAbsolute();
+  //     m_backLeftModule.resetSteerAngleToAbsolute();
+  //     m_backRightModule.resetSteerAngleToAbsolute();
+  // }
 
   /**
    * Set modules to point "forward". This is same as joystick
    * to neutral position with auto return to zero set true. The
    * calling command must require the drive base and should run
    * for 1 second so it prevents the DriveCommand from stopping
-   * wheel turn.
-   * TODO: Not currently working.
+   * wheel turn prematurely.
+   * TODO: Not currently working. Don't know why.
    */
   public void setModulesToForward()
   {
@@ -685,7 +685,7 @@ public class DriveBase extends SubsystemBase
     m_backRightModule.setStartingPosition();
 
     m_navx.reset(); // or zeroGyro();
-
+    
     // Reseting encoders here seems logical...but in testing it did not
     // work as expected. Now, if you set to start position and disable
     // enable, you can continue driving. If you reset the encoders here

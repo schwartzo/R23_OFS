@@ -109,12 +109,20 @@ public class TestAuto4 extends CommandBase
 		PathPlannerTrajectory exampleTrajectory = PathPlanner.generatePath(
 				new PathConstraints(MAX_WHEEL_SPEED, MAX_WHEEL_ACCEL), 
 				new PathPoint(new Translation2d(spx, spy), spr, spr),
-				new PathPoint(new Translation2d(spx += 1, spy += 1), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(90)), 
-				new PathPoint(new Translation2d(spx += 1, spy += 0), Rotation2d.fromDegrees(0), spr) 
+				new PathPoint(new Translation2d(spx += 2, spy += 1), Rotation2d.fromDegrees(0), Rotation2d.fromDegrees(90)), 
+				new PathPoint(new Translation2d(spx += 3, spy += 0), Rotation2d.fromDegrees(0), spr) 
 	        );
 	
-		//command = new AutoDrivePPTrajectory(driveBase, exampleTrajectory, StopMotors.stop, Brakes.on);
-		command = new AutoDrivePPTrajectory(driveBase, RobotContainer.ppTestTrajectory, StopMotors.stop, Brakes.on);
+		// Mirror trajectory for starting on Red side. Force blue for testing use live alliance
+		// for full scale testing or competition. We only do this here for manually created trajectories.
+		// For GUI created trajectoryies, the PPSwerveControllerCommand does the mirroring automatically.
+
+		exampleTrajectory = PathPlannerTrajectory.transformTrajectoryForAlliance(exampleTrajectory,
+																				 Alliance.Blue); 
+																				 //DriverStation.getAlliance());
+
+		command = new AutoDrivePPTrajectory(driveBase, exampleTrajectory, StopMotors.stop, Brakes.on);
+		//command = new AutoDrivePPTrajectory(driveBase, RobotContainer.ppTestTrajectory, StopMotors.stop, Brakes.on);
 		
 		commands.addCommands(command);
 		

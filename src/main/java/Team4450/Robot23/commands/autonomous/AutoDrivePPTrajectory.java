@@ -23,7 +23,7 @@ public class AutoDrivePPTrajectory extends PPSwerveControllerCommand
 {
     private static double   kPX = 1.0, kIX = kPX / 100, kDX = 0, startTime;
     private static double   kPY = 1.0, kIY = kPY / 100, kDY = 0;
-    private static double   kPR = 0.25, KIR = kPR / 100, KDR = 0;
+    private static double   kPR = 1.0, KIR = kPR / 100, KDR = 0;
     private int             iterations;
 
     private DriveBase               driveBase;
@@ -48,7 +48,7 @@ public class AutoDrivePPTrajectory extends PPSwerveControllerCommand
             new PIDController(kPR, 0, 0),
             driveBase::setSpeeds,
             //driveBase::setModuleStates,
-            false);
+            true);
 
         this.driveBase = driveBase;
         this.trajectory = trajectory;

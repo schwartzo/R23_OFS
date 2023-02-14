@@ -119,8 +119,6 @@ public class AutoDrive extends CommandBase
 			
 			speed = pidController.calculate(actualDistance, elapsedTime);
 			
-			//power = pidController.get();
-			
 			Util.consoleLog("actdist=%.2f  error=%.2f  speed=%.3f  time=%.3f", actualDistance, 
 							pidController.getError(), speed, elapsedTime);
 		}

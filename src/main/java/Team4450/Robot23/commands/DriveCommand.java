@@ -75,7 +75,8 @@ public class DriveCommand extends CommandBase
         // Squaring seemed to really slow throttle response.
         //throttle = squareTheInput(throttle);
         //strafe = squareTheInput(strafe);
-        //rotation = squareTheInput(rotation);
+        
+        rotation = squareTheInput(rotation);
 
         throttle = slewX.calculate(throttle);
         strafe = slewY.calculate(strafe);

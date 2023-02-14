@@ -25,7 +25,7 @@ import pabeles.concurrency.IntObjectConsumer;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "ORF23-02.10.23-1";
+	public static String		PROGRAM_NAME = "ORF23-02.13.23-2";
 
 	public static Robot			robot;
 
@@ -41,7 +41,7 @@ public final class Constants
 
     public static final int     CLAW_MOTOR = 15;
     public static final int     WINCH_MOTOR = 13;
-    public static final Int     CIB_MOTOR = 14;
+    public static final int     CIB_MOTOR = 14;
     public static final int     REV_PDB = 20;
 	
 	// GamePad port assignments.
@@ -87,7 +87,7 @@ public final class Constants
     // second or 1 unit in 1/3 second. So larger slew is faster ramp to
     // 100%. 1.5 is 100% in 3/4 second. 2 is 100% in 1/2 second.
     public static final double  THROTTLE_SLEW = 1.5;        
-    public static final double  ROTATION_SLEW = 3.0;  //3.0;
+    public static final double  ROTATION_SLEW = 2.0;  //3.0;
 
     /**
      * The left-to-right distance between the drivetrain wheels
@@ -116,7 +116,7 @@ public final class Constants
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 7; //  Set back left drive motor ID
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = 8; //  Set back left steer motor ID
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = 9; //  Set back left steer encoder ID
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(556.195); //  Measure and set back left steer offset
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(55.283); //  Measure and set back left steer offset
 
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 10; //  Set back right drive motor ID
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 11; //  Set back right steer motor ID
