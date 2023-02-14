@@ -25,7 +25,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot 
 {
-  private RobotContainer robotContainer;
+  private RobotContainer  robotContainer;
+  private boolean         isAligned;
 
   /**
    * This function is called when the robot is first started up and should be used
@@ -229,6 +230,12 @@ public class Robot extends TimedRobot
 
     robotContainer.resetFaults();
 
+    // Align wheels to start position.
+
+    RobotContainer.driveBase.setModulesToStartPosition();
+
+    isAligned = true;
+    
     // RobotContainer function determines which auto command is selected to run.
 
     Command autonomousCommand = robotContainer.getAutonomousCommand();
@@ -274,6 +281,12 @@ public class Robot extends TimedRobot
 
     robotContainer.resetFaults();
 
+    // Align wheels to start position if not already done.
+
+    if (!isAligned) RobotContainer.driveBase.setModulesToStartPosition();
+
+    isAligned = true;
+
     // Driving handled by DriveCommand which is default command for the DriveBase.
     // Other commands scheduled by joystick buttons.
 
@@ -306,7 +319,7 @@ public class Robot extends TimedRobot
 
     // Next two lines launch teleop mode, but since we are in test
     // mode, LiveWindow will be enabled to display test data to the
-    // outlineviewer to shuffleboard. Our "test" mode is  the regular
+    // outlineviewer to shuffleboard. Our "test" mode is the regular
     // telop with LW enabled.
 
     teleopInit();

@@ -25,7 +25,7 @@ import pabeles.concurrency.IntObjectConsumer;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "ORF23-02.13.23-2";
+	public static String		PROGRAM_NAME = "ORF23-02.14.23-3";
 
 	public static Robot			robot;
 
@@ -41,7 +41,7 @@ public final class Constants
 
     public static final int     CLAW_MOTOR = 15;
     public static final int     WINCH_MOTOR = 13;
-    public static final int     CIB_MOTOR = 14;
+    public static final int     ARM_MOTOR = 14;
     public static final int     REV_PDB = 20;
 	
 	// GamePad port assignments.
@@ -52,7 +52,7 @@ public final class Constants
 
 	// Digital Input port assignments. Encoder takes 2 ports.
     public static final int     WINCH_SWITCH = 0;
-    public static final int     CIB_SWITCH = 1;
+    public static final int     ARM_SWITCH = 1;
     public static final int     CLAW_SWITCH = 2;     
 	  
 	// Analog Input port assignments.

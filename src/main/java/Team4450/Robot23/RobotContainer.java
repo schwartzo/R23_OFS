@@ -130,7 +130,7 @@ public class RobotContainer
 		getMatchInformation();
 
 		// Read properties file from RoboRio "disk". If we fail to open the file,
-		// log the exception but continue and we will default to competition robot.
+		// log the exception but continue and default to competition robot.
       
 		try {
 			robotProperties = Util.readProperties();
@@ -216,7 +216,7 @@ public class RobotContainer
 
 		driveBase.setDefaultCommand(new DriveCommand(
 				driveBase,
-				() -> driverPad.getRightY() + driverPad.getLeftY(), // test throttle on both sticks.
+				() -> driverPad.getRightY(), 
 				() -> driverPad.getRightX(),
 				driverPad.getLeftXDS(),
 				driverPad));

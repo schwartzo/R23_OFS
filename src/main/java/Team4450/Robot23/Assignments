@@ -22,7 +22,7 @@ Port	Device			Description
 10      SparkMax        RR drive motor.
 11      SparkMax        RR steer motor.
 13      SparkMax        Winch motor.
-14      SparkMax        CIB motor.
+14      SparkMax        ARM motor.
 
 PWM Ports
 Port	Device			Description
@@ -49,7 +49,7 @@ Digital I/O Ports
 Port	Device			Description
 -----------------------------------------------------------------------------------
 0       Limit Switch    Winch reset.
-1       Limit Switch    CIB reset.
+1       Limit Switch    ARM reset.
 2       Limit Switch    Claw reset.
 
 
@@ -84,14 +84,14 @@ POV_90                  Switch DS tab.
 Utility GamePad - Left Joystick
 Button Name				Function
 -----------------------------------------------------------------------------------
-Y Axis                  CIB In/Out, pull back (+) is in.
-X Axis                  Claw Open/Close, right (+) is close, left is open.
+Y Axis                  ARM In/Out, pull back (+) is in.
 
 
 Utility GamePad - Right Joystick
 Button Name				Function
 -----------------------------------------------------------------------------------
 Y Axis                  Winch Up/down, pull back (+) is up.
+X Axis                  Claw Open/Close, right (+) is close, left is open.
 
 
 Utility GamePad - Buttons
