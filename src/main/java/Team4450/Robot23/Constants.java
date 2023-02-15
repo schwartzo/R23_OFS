@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "ORF23-02.14.23-3";
+	public static String		PROGRAM_NAME = "ORF23-02.15.23-1";
 
 	public static Robot			robot;
 
@@ -62,6 +62,7 @@ public final class Constants
 	public static final int		LCD_3 = 3;	    // ShuffleBoard subsystem.
 	public static final int		LCD_4 = 4;	    // ShuffleBoard subsystem.
 	public static final int		LCD_5 = 5;	    // Autonomous commands.
+	public static final int		LCD_6 = 6;	    // ShuffleBoard subsystem.
 	public static final int		LCD_7 = 7;	    // ShuffleBoard subsystem.
 	public static final int		LCD_8 = 8;	    // ShuffleBoard subsystem.
 	public static final int		LCD_9 = 9;	    // ShuffleBoard subsystem.

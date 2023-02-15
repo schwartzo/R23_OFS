@@ -211,14 +211,14 @@ public class RobotContainer
 
 		// Note that field oriented driving does the movements in relation to the field. So
 		// throttle is always down the field and back and strafe is always left right from
-		// the down the field axis, not matter which way the robot is pointing. Robot oriented
+		// the down the field axis, no matter which way the robot is pointing. Robot oriented
 		// driving movemments are in relation to the direction the robot is currently pointing.
 
 		driveBase.setDefaultCommand(new DriveCommand(
 				driveBase,
-				() -> driverPad.getRightY(), 
-				() -> driverPad.getRightX(),
-				driverPad.getLeftXDS(),
+				() -> driverPad.getLeftY(),	// Throttle
+				() -> driverPad.getLeftX(),	// Strafe
+				driverPad.getRightXDS(),	// Rotation
 				driverPad));
 
 		// Start the compressor, PDP and camera feed monitoring Tasks.
@@ -304,8 +304,8 @@ public class RobotContainer
     	new Trigger(() -> driverPad.getBackButton())
         	.onTrue(new InstantCommand(driveBase::toggleFieldOriented));
 		
-		// Toggle camera feeds. 
-		new Trigger(() -> driverPad.getLeftBumper())
+		// Change camera feed. 
+		new Trigger(() -> driverPad.getRightBumper())
     		.onTrue(new InstantCommand(cameraFeed::ChangeCamera));
 
 		new Trigger(() -> driverPad.getAButton())
