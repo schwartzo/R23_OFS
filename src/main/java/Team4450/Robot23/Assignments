@@ -62,14 +62,13 @@ Driver GamePad - Left Joystick
 Button Name				Function
 -----------------------------------------------------------------------------------
 Y Axis					Forward/Backward driving.
-X Axis                  Rotate.
+X Axis                  Left/Right strafe (sideways movement).
 
 
 Driver GamePad - Right Joystick
 Button Name				Function
 -----------------------------------------------------------------------------------
-Y Axis					Forward/Backward driving.
-X Axis                  Left/Right strafe (sideways movement).
+X Axis                  Rotate.
 
 
 Driver GamePad - Buttons
@@ -77,8 +76,10 @@ Button Name				Function
 -----------------------------------------------------------------------------------
 BACK                    Toggle field/robot orientation driving.
 START                   Align wheels to start position.
-LEFT_BUMPER        		Switch Cameras.
+RIGHT_BUMPER       		Switch Cameras.
 POV_90                  Switch DS tab.
+A                       Reset simulated yaw.
+B                       Reset simulated distance traveled.
 
 
 Utility GamePad - Left Joystick
