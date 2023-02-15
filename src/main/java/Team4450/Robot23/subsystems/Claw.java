@@ -1,10 +1,6 @@
 package Team4450.Robot23.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import Team4450.Lib.FXEncoder;
 import Team4450.Lib.Util;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -16,7 +12,7 @@ public class Claw extends SubsystemBase
 {
     private WPI_TalonFX     motor = new WPI_TalonFX(CLAW_MOTOR);
     private FXEncoder       encoder = new FXEncoder(motor);
-    private DigitalInput    limitSwitch = new DigitalInput(ARM_SWITCH);
+    private DigitalInput    limitSwitch = new DigitalInput(CLAW_SWITCH);
 
     private final double    ARM_MAX = 1000;
 
@@ -25,6 +21,10 @@ public class Claw extends SubsystemBase
         Util.consoleLog();
     }
 
+    /**
+     * Sets claw motor power.
+     * @param power + means open claw, - means close claw.
+     */
     public void setPower(double power)
     {
         // If power positive, which means open, check limit switch stop if true.
@@ -47,6 +47,10 @@ public class Claw extends SubsystemBase
         return encoder.get();
     }
 
+    /**
+     * Returns claw open switch.
+     * @return True when claw fully open.
+     */
     public boolean getSwitch()
     {
         return limitSwitch.get();

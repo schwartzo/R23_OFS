@@ -65,7 +65,7 @@ public class ShuffleBoard extends SubsystemBase
                       RobotContainer.utilityPad.getRightY());
 
         LCD.printLine(LCD_7, "winchEnc=%.2f winchSw=%b - armEnc=%.2f armSw=%b - clawEnc=%d clawSw=%b",
-                      RobotContainer.winch.getPosition(), RobotContainer.winch.getSwitch(),
+                      RobotContainer.winch.getPosition(), RobotContainer.winch.getLowSwitch(),
                       RobotContainer.arm.getPosition(), RobotContainer.arm.getSwitch(),
                       RobotContainer.claw.getPosition(), RobotContainer.claw.getSwitch());                      
                           
@@ -97,6 +97,9 @@ public class ShuffleBoard extends SubsystemBase
         SmartDashboard.putBoolean("Brake", false);
         SmartDashboard.putBoolean("TargetLocked", false);
         SmartDashboard.putBoolean("Autonomous Active", false);
+        SmartDashboard.putBoolean("DropArm", false);
+        SmartDashboard.putBoolean("RetractArm", false);
+        SmartDashboard.putBoolean("OpenClaw", false);
     }
 
     /**

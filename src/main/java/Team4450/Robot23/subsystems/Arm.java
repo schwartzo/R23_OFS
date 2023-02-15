@@ -12,9 +12,9 @@ import static Team4450.Robot23.Constants.*;
 
 public class Arm extends SubsystemBase
 {
-    private CANSparkMax     motor = new CANSparkMax(WINCH_MOTOR, MotorType.kBrushless);
+    private CANSparkMax     motor = new CANSparkMax(ARM_MOTOR, MotorType.kBrushless);
     private RelativeEncoder encoder = motor.getEncoder();
-    private DigitalInput    limitSwitch = new DigitalInput(WINCH_SWITCH);
+    private DigitalInput    limitSwitch = new DigitalInput(ARM_SWITCH);
 
     private final double    ARM_MAX = 1000;
 
@@ -23,6 +23,10 @@ public class Arm extends SubsystemBase
         Util.consoleLog();
     }
 
+    /**
+     * Set Arm motor power.
+     * @param power -1..+1, + is retract arm, - is extend arm.
+     */
     public void setPower(double power)
     {
         // If power positive, which means retract, check limit switch stop if true.
@@ -45,6 +49,10 @@ public class Arm extends SubsystemBase
         return encoder.getPosition();
     }
 
+    /**
+     * Return Arm retracted limit switch state.
+     * @return True if switch contacted (arm fully retracted).
+     */
     public boolean getSwitch()
     {
         return limitSwitch.get();

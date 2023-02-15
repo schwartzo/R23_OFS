@@ -20,6 +20,10 @@ import Team4450.Robot23.commands.DriveArm;
 import Team4450.Robot23.commands.DriveClaw;
 import Team4450.Robot23.commands.DriveCommand;
 import Team4450.Robot23.commands.DriveWinch;
+import Team4450.Robot23.commands.DropArm;
+import Team4450.Robot23.commands.OpenClaw;
+import Team4450.Robot23.commands.RaiseArm;
+import Team4450.Robot23.commands.RetractArm;
 import Team4450.Robot23.commands.SetToStartPositionCommand;
 import Team4450.Robot23.commands.Utility.NotifierCommand;
 import Team4450.Robot23.commands.autonomous.TestAuto1;
@@ -67,6 +71,11 @@ public class RobotContainer
 	// Subsystem Default Commands.
 
     // Persistent Commands.
+
+	private DropArm				dropArm;
+	private RetractArm			retractArm;
+	private OpenClaw			openClaw;
+	private RaiseArm			raiseArm;
 
 	// Some notes about Commands.
 	// When a Command is created with the New operator, its constructor is called. When the
@@ -193,6 +202,11 @@ public class RobotContainer
 		claw = new Claw();
 
 		// Create any persistent commands.
+
+		dropArm = new DropArm(winch);
+		retractArm = new RetractArm(arm);
+		openClaw = new OpenClaw(claw);
+		raiseArm = new RaiseArm(winch);
 
 		// Set any subsystem Default commands.
 
@@ -344,7 +358,7 @@ public class RobotContainer
 		// So any function that operates valves will trigger the watchdogs. Again, the watchdog 
 		// notifications are only a warning (though too much delay on main thread can effect robot
 		// operation) they can fill the Riolog to the point it is not useful.
-		// Note: the threaded command can only execute a runnable (function on a class) not a Command.
+		// Note: the threaded command can only execute a run(((((nable (function on a class) not a Command.
 		
 		// Toggle pickup deployment
 		//new Trigger(() -> utilityPad.getLeftBumper())
@@ -352,6 +366,17 @@ public class RobotContainer
 			//.onTrue(new InstantCommand(pickup::toggleDeploy, pickup));
 		//	.onTrue(new NotifierCommand(pickup::toggleDeploy, 0.0, "DeployPickup", pickup));
 
+		// Start or stop (if already in progress), the command to drop arm to low position.
+		new Trigger(() -> utilityPad.getPOVAngle(180)).toggleOnTrue(dropArm);
+
+		// Start or stop (if already in progress), the command to retract arm to inward position.
+		new Trigger(() -> utilityPad.getPOVAngle(270)).toggleOnTrue(retractArm);
+
+		// Start or stop (if already in progress), the command to fully open the claw.
+		new Trigger(() -> utilityPad.getRightBumper()).toggleOnTrue(openClaw);
+
+		// Start or stop (if already in progress), the command to raise the arm to target position.
+		new Trigger(() -> utilityPad.getPOVAngle(0)).toggleOnTrue(raiseArm);
 	}
 
 	/**
