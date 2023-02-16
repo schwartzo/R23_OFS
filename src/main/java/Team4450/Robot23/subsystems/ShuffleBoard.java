@@ -98,6 +98,7 @@ public class ShuffleBoard extends SubsystemBase
         SmartDashboard.putBoolean("DropArm", false);
         SmartDashboard.putBoolean("RetractArm", false);
         SmartDashboard.putBoolean("OpenClaw", false);
+        SmartDashboard.putBoolean("RaiseArm", false);
     }
 
     /**

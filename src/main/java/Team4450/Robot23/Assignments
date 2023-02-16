@@ -115,6 +115,10 @@ Low Battery				boolean			True when battery is low.
 Overload				boolean			True when brownout has occurred.
 Auto Program            Chooser         List of autonomous programs.
 Field Oriented          boolean         True when swerve drive is in field orientation mode.
+RaiseArm                boolean         True when RaiseArm command is active.
+RetractArm              boolean         True when RetractArm command is active.
+DropArm                 boolean         True when DropArm command is active.
+OpenClaw                boolean         True when OpenClaw command is active.
 
 
 Drive Base gearbox ratios: SDS Level 1 for approx 9.28 f/s or 3 m/s.
