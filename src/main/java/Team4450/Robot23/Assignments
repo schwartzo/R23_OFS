@@ -76,6 +76,7 @@ Button Name				Function
 -----------------------------------------------------------------------------------
 BACK                    Toggle field/robot orientation driving.
 START                   Align wheels to start position.
+LEFT_BUMPER             Slow Mode.
 RIGHT_BUMPER       		Switch Cameras.
 POV_90                  Switch DS tab.
 A                       Reset simulated yaw.
