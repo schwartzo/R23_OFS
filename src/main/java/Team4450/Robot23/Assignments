@@ -80,7 +80,8 @@ LEFT_BUMPER             Slow Mode.
 RIGHT_BUMPER       		Switch Cameras.
 POV_90                  Switch DS tab.
 A                       Reset simulated yaw.
-B                       Reset simulated distance traveled.
+B                       Toggle drive wheel brake mode.
+X                       Reset simulated distance traveled.
 
 
 Utility GamePad - Left Joystick
@@ -111,6 +112,7 @@ Disabled				boolean			True when robot is disabled.
 Auto Mode				boolean			True when robot is in autonomous mode.
 Teleop Mode				boolean			True when robot is in teleop mode.
 FMS						boolean			True when robot is connected to the FMS.
+Brakes					boolean			True when drive motors are in brake mode.
 Low Battery				boolean			True when battery is low.
 Overload				boolean			True when brownout has occurred.
 Auto Program            Chooser         List of autonomous programs.
