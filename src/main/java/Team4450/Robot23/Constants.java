@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "RAC23-02.15.23-4";
+	public static String		PROGRAM_NAME = "RAC23-02.16.23-1";
 
 	public static Robot			robot;
 
@@ -69,7 +69,7 @@ public final class Constants
 	public static final int		LCD_10 = 10;	// ShuffleBoard subsystem.
 
 	// Default starting field position in meters for pose tracking.
-	public static final Pose2d	DEFAULT_STARTING_POSE = new Pose2d(2.610, 2.847, new Rotation2d(0));
+	public static final Pose2d	DEFAULT_STARTING_POSE = new Pose2d(2.610, 2.847, Rotation2d.fromDegrees(180));
     
 	// Next group of constants are for Swerve drive.
 
@@ -148,7 +148,7 @@ public final class Constants
     // public static final double  DB_VELOCITY_KP = .12;  
     // public static final double  DB_VELOCITY_KD = 0.0;
 
-    private final AprilTagFieldLayout aprlFieldLayout = new AprilTagFieldLayout(Arrays.asList(
+    private final AprilTagFieldLayout aprilFieldLayout = new AprilTagFieldLayout(Arrays.asList(
     new AprilTag(1, new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters( 42.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, Math.PI))),
     new AprilTag(2, new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(108.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, Math.PI))),
     new AprilTag(3, new Pose3d(Units.inchesToMeters(610.77), Units.inchesToMeters(174.19), Units.inchesToMeters(18.22), new Rotation3d(0.0, 0.0, Math.PI))),
