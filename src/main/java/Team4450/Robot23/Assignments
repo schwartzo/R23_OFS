@@ -21,8 +21,8 @@ Port	Device			Description
 8       SparkMax        LR steer motor.
 10      SparkMax        RR drive motor.
 11      SparkMax        RR steer motor.
-13      SparkMax        Winch motor.
-14      SparkMax        ARM motor.
+13      SparkMax        Arm motor.
+14      SparkMax        Winch motor.
 
 PWM Ports
 Port	Device			Description
