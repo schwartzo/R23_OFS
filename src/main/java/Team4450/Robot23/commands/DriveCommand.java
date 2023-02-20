@@ -90,7 +90,7 @@ public class DriveCommand extends CommandBase
             rotation = Util.clampValue(rotation, .30);
         }
 
-        driveBase.drive(throttle * -1, strafe * -1, rotation);
+        driveBase.drive(throttle, strafe, rotation);
     }
 
     @Override

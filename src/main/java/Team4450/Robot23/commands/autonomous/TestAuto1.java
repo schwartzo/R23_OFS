@@ -70,7 +70,7 @@ public class TestAuto1 extends CommandBase
 
 		SmartDashboard.putBoolean("Autonomous Active", true);
 
-		// Set heading to initial angle (0 is robot pointed down the field) so
+		// Set heading tracking to initial angle (0 is robot pointed down the field) so
 		// NavX class can track which way the robot is pointed all during the match.
 		RobotContainer.navx.setHeading(startingPose.getRotation().getDegrees());
 			
@@ -89,7 +89,7 @@ public class TestAuto1 extends CommandBase
 		
 		commands = new SequentialCommandGroup();
 		
-		// First action is to drive forward 1 meters and stop. Note Brakes not currently implemented.
+		// First action is to drive forkward 1 meters and stop. Note Brakes not currently implemented.
 		
 		command = new AutoDriveProfiled(driveBase, 1, StopMotors.stop, Brakes.on);
 		

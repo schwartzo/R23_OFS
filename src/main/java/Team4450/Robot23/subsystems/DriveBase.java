@@ -313,6 +313,12 @@ public class DriveBase extends SubsystemBase
    */
   public void drive(double throttle, double strafe, double rotation)
   {
+    // Invert throttle & strafe to fix the problem with starting with robot
+    // facing backwards.
+
+    //throttle *= -1;
+    //strafe   *= -1;
+
     // Convert joystick % values into speeds.
 
     throttle *= MAX_VELOCITY_METERS_PER_SECOND;
@@ -440,7 +446,7 @@ public class DriveBase extends SubsystemBase
 
     distanceTraveled += currentDistance;
 
-    SmartDashboard.putNumber("Distance Traveled(m)", distanceTraveled);
+    SmartDashboard.putNumber("Distance Traveled(m)", distanceTraveled); // * -1);
     
     // Track gyro yaw to support simulation of resettable yaw.
 
@@ -710,7 +716,7 @@ public class DriveBase extends SubsystemBase
    */
   public double getDistanceTraveled()
   {
-    return distanceTraveled;
+    return distanceTraveled; // * -1;
   }
 
   /**

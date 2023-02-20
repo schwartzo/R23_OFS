@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "RAC23-02.16.23-1";
+	public static String		PROGRAM_NAME = "RAC23-02.18.23-2";
 
 	public static Robot			robot;
 
@@ -69,7 +69,7 @@ public final class Constants
 	public static final int		LCD_10 = 10;	// ShuffleBoard subsystem.
 
 	// Default starting field position in meters for pose tracking.
-	public static final Pose2d	DEFAULT_STARTING_POSE = new Pose2d(2.610, 2.847, Rotation2d.fromDegrees(180));
+	public static final Pose2d	DEFAULT_STARTING_POSE = new Pose2d(2.610, 2.847, Rotation2d.fromDegrees(0));
     
 	// Next group of constants are for Swerve drive.
 
