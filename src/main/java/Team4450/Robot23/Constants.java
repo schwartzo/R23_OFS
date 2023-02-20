@@ -39,8 +39,8 @@ public final class Constants
 	// Non-drive base motor controller port assignments
 
     public static final int     CLAW_MOTOR = 15;
-    public static final int     WINCH_MOTOR = 13;
-    public static final int     ARM_MOTOR = 14;
+    public static final int     WINCH_MOTOR = 14;
+    public static final int     ARM_MOTOR = 13;
     public static final int     REV_PDB = 20;
 	
 	// GamePad port assignments.
