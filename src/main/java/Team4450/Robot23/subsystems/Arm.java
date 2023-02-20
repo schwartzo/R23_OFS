@@ -32,7 +32,7 @@ public class Arm extends SubsystemBase
         // If power positive, which means retract, check limit switch stop if true.
         // If power negative, which means extend, check encoder for max height, stop if there.
 
-        if ((power > 0 && limitSwitch.get()) || (power < 0 && encoder.getPosition() >= ARM_MAX)) power = 0;
+        //if ((power > 0 && limitSwitch.get()) || (power < 0 && encoder.getPosition() >= ARM_MAX)) power = 0;
 
         if (limitSwitch.get()) encoder.setPosition(0);
 
