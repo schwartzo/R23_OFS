@@ -21,6 +21,11 @@ public class Arm extends SubsystemBase
     public Arm()
     {
         Util.consoleLog();
+
+        // Arm will start all the way retracted and that is encoder zero.
+        // Encoder max will represent arm fully extended.
+
+        encoder.setPosition(0);
     }
 
     /**
@@ -30,12 +35,16 @@ public class Arm extends SubsystemBase
     public void setPower(double power)
     {
         // If power positive, which means retract, check limit switch stop if true.
-        // If power negative, which means extend, check encoder for max height, stop if there.
+        // If power negative, which means extend, check encoder for max extend, stop if there.
 
         //if ((power > 0 && limitSwitch.get()) || (power < 0 && encoder.getPosition() >= ARM_MAX)) power = 0;
 
-        if (limitSwitch.get()) encoder.setPosition(0);
+        //if ((power > 0 && encoder.getPosition() <= 0) || (power < 0 && encoder.getPosition() >= ARM_MAX)) power = 0;
 
+        //if (limitSwitch.get()) encoder.setPosition(0);
+
+        power = Util.clampValue(power, .50);
+        
         motor.set(power);
     }
 
@@ -44,6 +53,10 @@ public class Arm extends SubsystemBase
         motor.stopMotor();
     }
 
+    /**
+     * Return Arm encoder position.
+     * @return Position in revolutions.
+     */
     public double getPosition()
     {
         return encoder.getPosition();

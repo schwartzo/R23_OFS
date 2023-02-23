@@ -57,7 +57,7 @@ public class RaiseArm extends CommandBase
     @Override
     public boolean isFinished()
     {
-        return controller.onTarget(tolerance) || winch.getLowSwitch();
+        return controller.onTarget(tolerance); // || winch.getLowSwitch();
     }
 
     @Override

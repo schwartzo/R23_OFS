@@ -93,46 +93,49 @@ public class TestAuto1 extends CommandBase
 		
 		command = new AutoDriveProfiled(driveBase, 1, StopMotors.stop, Brakes.on);
 		
-		commands.addCommands(command);
+		//commands.addCommands(command);
 		
 		// Next action is to drive backward 1 meters and stop. Note Brakes not currently implemented.
 		
 		command = new AutoDriveProfiled(driveBase, -1, StopMotors.stop, Brakes.on);
 		
-		commands.addCommands(command);
+		//commands.addCommands(command);
 
 		// Now strafe left 1 meters.
 
 		command = new AutoStrafeProfiled(driveBase, 1, StopMotors.stop, Brakes.on);
 		
-		commands.addCommands(command);
+		//commands.addCommands(command);
 
 		// Now strafe right 1 meters.
 
 		command = new AutoStrafeProfiled(driveBase, -1, StopMotors.stop, Brakes.on);
 		
-		commands.addCommands(command);
+		//commands.addCommands(command);
 
 		// Now rotate 90 degrees left.
 
 		command = new AutoRotate(driveBase, 90);
 
-		commands.addCommands(command);
+		//commands.addCommands(command);
 
 		// Now rotate 180 degrees right.
 
 		command = new AutoRotateProfiled(driveBase, -180);
 
-		commands.addCommands(command);
+		//commands.addCommands(command);
 
 		// Now rotate 90 degrees left.
 
 		command = new AutoRotateProfiled(driveBase, 90);
 
-		commands.addCommands(command);
+		//commands.addCommands(command);
 
-		// Now drive ahead 1 meter.
-		command = new AutoDrive(driveBase, .50, 1.0, StopMotors.stop, Brakes.on, Pid.on);
+		// Now drive ahead 1.683 meter to charge station.
+
+		//ommand = new AutoDrive(driveBase, .50, 1.683, StopMotors.stop, Brakes.on, Pid.on);
+
+		command = new AutoDrive(driveBase, .50, 3.429, StopMotors.stop, Brakes.on, Pid.on);
 
 		commands.addCommands(command);
 

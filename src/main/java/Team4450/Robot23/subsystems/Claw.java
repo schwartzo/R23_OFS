@@ -30,10 +30,12 @@ public class Claw extends SubsystemBase
         // If power positive, which means open, check limit switch stop if true.
         // If power negative, which means close, check encoder for max height, stop if there.
 
-        if ((power > 0 && limitSwitch.get()) || (power < 0 && encoder.get() >= ARM_MAX)) power = 0;
+        //if ((power > 0 && limitSwitch.get()) || (power < 0 && encoder.get() >= ARM_MAX)) power = 0;
 
-        if (limitSwitch.get()) encoder.reset();
+        //if (limitSwitch.get()) encoder.reset();
 
+        power = Util.clampValue(power, .30);
+        
         motor.set(power);
     }
 

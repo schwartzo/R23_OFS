@@ -1,5 +1,7 @@
 package Team4450.Robot23.commands;
 
+import javax.lang.model.util.ElementScanner14;
+
 import Team4450.Lib.Util;
 import Team4450.Robot23.subsystems.Arm;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,7 +29,7 @@ public class RetractArm extends CommandBase
     {
         Util.consoleLog();
 
-        arm.setPower(.50);
+        arm.setPower(.30);
 
         SmartDashboard.putBoolean("RetractArm", true);
     }
@@ -35,7 +37,12 @@ public class RetractArm extends CommandBase
     @Override
     public boolean isFinished()
     {
-        return arm.getSwitch();
+        if (arm.getPosition() <= 0) 
+            return true;
+        else 
+            return false;
+
+        //return arm.getSwitch();
     }
 
     @Override

@@ -23,6 +23,11 @@ public class Winch  extends SubsystemBase
         Util.consoleLog();
 
         motor.setInverted(true);
+
+        // Winch will start at max up position so that is encoder zero. Encoder max will
+        // be winch at lowest position.
+
+        encoder.setPosition(0);
     }
 
     /**
@@ -36,7 +41,11 @@ public class Winch  extends SubsystemBase
 
         //if ((power < 0 && lowLimitSwitch.get()) || (power > 0 && encoder.getPosition() >= WINCH_MAX)) power = 0;
 
-        if (lowLimitSwitch.get()) encoder.setPosition(0);
+        //if ((power < 0 && encoder.getPosition() >= WINCH_MAX) || (power > 0 && encoder.getPosition() <= 0)) power = 0;
+
+        //if (lowLimitSwitch.get()) encoder.setPosition(0);
+
+        power = Util.clampValue(power, .30);
 
         motor.set(power);
     }
@@ -46,6 +55,10 @@ public class Winch  extends SubsystemBase
         motor.stopMotor();
     }
 
+    /**
+     * Return Winch encoder position.
+     * @return Position in revolutions.
+     */
     public double getPosition()
     {
         return encoder.getPosition();
