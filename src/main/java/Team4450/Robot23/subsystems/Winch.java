@@ -39,11 +39,11 @@ public class Winch  extends SubsystemBase
         // If power negative, which means go down, check limit switch stop if true.
         // If power positive, which means go up, check encoder for max height, stop if there.
 
-        //if ((power < 0 && lowLimitSwitch.get()) || (power > 0 && encoder.getPosition() >= WINCH_MAX)) power = 0;
+        if ((power < 0 && lowLimitSwitch.get()) || (power > 0 && encoder.getPosition() >= WINCH_MAX)) power = 0;
 
-        //if ((power < 0 && encoder.getPosition() >= WINCH_MAX) || (power > 0 && encoder.getPosition() <= 0)) power = 0;
+        if ((power < 0 && encoder.getPosition() >= WINCH_MAX) || (power > 0 && encoder.getPosition() <= 0)) power = 0;
 
-        //if (lowLimitSwitch.get()) encoder.setPosition(0);
+        if (lowLimitSwitch.get()) encoder.setPosition(0);
 
         power = Util.clampValue(power, .30);
 

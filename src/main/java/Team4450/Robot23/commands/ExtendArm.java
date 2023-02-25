@@ -2,34 +2,32 @@ package Team4450.Robot23.commands;
 
 import Team4450.Lib.SynchronousPID;
 import Team4450.Lib.Util;
-import Team4450.Robot23.subsystems.Winch;
+import Team4450.Robot23.subsystems.Arm;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
  * Moves the arm to a target position.
  */
-public class RaiseArm extends CommandBase 
+public class ExtendArm extends CommandBase 
 {
     public static double DEFAULT_POSITION = 100;
-    public static double LEVEL_1 = 100;
-    public static double LEVEL_2 = 100;
 
-    private final Winch     winch;
+    private final Arm       arm;
     private double          targetPostion;    // Revolutions of motor.
     private SynchronousPID  controller = new SynchronousPID(.01, 0, 0);
     private final double    tolerance = .5, maxPower = .3;
     private double          lastTimeCalled;
 
-    public RaiseArm(Winch winch, double target)
+    public ExtendArm(Arm arm, double target)
     {
         Util.consoleLog();
 
-        this.winch = winch;
+        this.arm = arm;
 
         this.targetPostion = target;
 
-        addRequirements(winch);
+        addRequirements(arm);
     }
 
     @Override
@@ -43,7 +41,7 @@ public class RaiseArm extends CommandBase
 
         controller.setOutputRange(-maxPower, maxPower);
 
-        SmartDashboard.putBoolean("RaiseArm", true);
+        SmartDashboard.putBoolean("ExtendArm", true);
 
         lastTimeCalled = Util.timeStamp();
     }
@@ -55,24 +53,24 @@ public class RaiseArm extends CommandBase
 
         lastTimeCalled = Util.timeStamp();
 
-        double power = controller.calculate(winch.getPosition(), time);
+        double power = controller.calculate(arm.getPosition(), time);
 
-        winch.setPower(power);
+        arm.setPower(power);
     }
 
     @Override
     public boolean isFinished()
     {
-        return controller.onTarget(tolerance); // || winch.getLowSwitch();
+        return controller.onTarget(tolerance);
     }
 
     @Override
     public void end(boolean interrupted) 
     {
-        winch.stop();
+        arm.stop();
 
         Util.consoleLog("interrupted=%b", interrupted);
 
-        SmartDashboard.putBoolean("RaiseArm", false);
+        SmartDashboard.putBoolean("ExtendArm", false);
     }
 }

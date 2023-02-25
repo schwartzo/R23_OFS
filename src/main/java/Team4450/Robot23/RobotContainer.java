@@ -204,7 +204,7 @@ public class RobotContainer
 		dropArm = new DropArm(winch);
 		retractArm = new RetractArm(arm);
 		openClaw = new OpenClaw(claw);
-		raiseArm = new RaiseArm(winch);
+		raiseArm = new RaiseArm(winch, RaiseArm.DEFAULT_POSITION);
 
 		// Set any subsystem Default commands.
 
