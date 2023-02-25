@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.DriverStation;
  */
 public final class Constants
 {
-	public static String		PROGRAM_NAME = "ORF23-02.20.23-1";
+	public static String		PROGRAM_NAME = "RAC23-02.22.23-1";
 
 	public static Robot			robot;
 
@@ -69,8 +69,21 @@ public final class Constants
 	public static final int		LCD_10 = 10;	// ShuffleBoard subsystem.
 
 	// Default starting field position in meters for pose tracking.
-	public static final Pose2d	DEFAULT_STARTING_POSE = new Pose2d(2.610, 2.847, Rotation2d.fromDegrees(0));
-    
+	public static final Pose2d	DEFAULT_STARTING_POSE = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+
+    public static Pose2d[]      STARTING_POSES = new Pose2d[]
+    {
+        new Pose2d(2.553, 4.915, Rotation2d.fromDegrees(0)),
+        new Pose2d(2.553, 4.360, Rotation2d.fromDegrees(0)),
+        new Pose2d(2.553, 3.836, Rotation2d.fromDegrees(0)),
+        new Pose2d(2.553, 3.361, Rotation2d.fromDegrees(0)),
+        new Pose2d(2.553, 2.838, Rotation2d.fromDegrees(0)),
+        new Pose2d(2.553, 2.340, Rotation2d.fromDegrees(0)),
+        new Pose2d(2.553, 1.805, Rotation2d.fromDegrees(0)),
+        new Pose2d(2.553, 1.265, Rotation2d.fromDegrees(0)),
+        new Pose2d(2.553, 0.713, Rotation2d.fromDegrees(0))
+    };
+
 	// Next group of constants are for Swerve drive.
 
     // The maximum voltage that will be delivered to the drive motors. This can be reduced to cap the 

@@ -16,15 +16,24 @@ import Team4450.Lib.MonitorCompressor;
 import Team4450.Lib.MonitorPDP;
 import Team4450.Lib.NavX;
 import Team4450.Lib.Util;
+import Team4450.Robot23.commands.DriveArm;
+import Team4450.Robot23.commands.DriveClaw;
 import Team4450.Robot23.commands.DriveCommand;
+import Team4450.Robot23.commands.DriveWinch;
+import Team4450.Robot23.commands.DropArm;
+import Team4450.Robot23.commands.OpenClaw;
+import Team4450.Robot23.commands.RaiseArm;
+import Team4450.Robot23.commands.RetractArm;
 import Team4450.Robot23.commands.SetToStartPositionCommand;
 import Team4450.Robot23.commands.Utility.NotifierCommand;
 import Team4450.Robot23.commands.autonomous.TestAuto1;
 import Team4450.Robot23.commands.autonomous.TestAuto3;
 import Team4450.Robot23.commands.autonomous.TestAuto4;
+import Team4450.Robot23.subsystems.Arm;
+import Team4450.Robot23.subsystems.Claw;
 import Team4450.Robot23.subsystems.DriveBase;
 import Team4450.Robot23.subsystems.ShuffleBoard;
-
+import Team4450.Robot23.subsystems.Winch;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -55,12 +64,18 @@ public class RobotContainer
 
 	public static ShuffleBoard	shuffleBoard;
 	public static DriveBase 	driveBase;
+	public static Winch			winch;
+	public static Arm			arm;
+	public static Claw			claw;
 
 	// Subsystem Default Commands.
 
-	//private final TankDrive		driveCommand;
-
     // Persistent Commands.
+
+	private DropArm				dropArm;
+	private RetractArm			retractArm;
+	private OpenClaw			openClaw;
+	private RaiseArm			raiseArm;
 
 	// Some notes about Commands.
 	// When a Command is created with the New operator, its constructor is called. When the
@@ -112,11 +127,9 @@ public class RobotContainer
 		TestAuto4
 	}
 
-	public static Pose2d	defaultStartingPose;
-
 	// Classes to access drop down lists on Driver Station.
 	private static SendableChooser<AutoProgram>	autoChooser;
-	private static SendableChooser<Pose2d>		startingPoseChooser;
+	private static SendableChooser<Integer>		startingPoseChooser;
 
 	/**
 	 * The container for the robot. Contains subsystems, Opertor Interface devices, and commands.
@@ -182,8 +195,16 @@ public class RobotContainer
 
 		shuffleBoard = new ShuffleBoard();
 		driveBase = new DriveBase();
+		winch = new Winch();
+		arm = new Arm();
+		claw = new Claw();
 
 		// Create any persistent commands.
+
+		dropArm = new DropArm(winch);
+		retractArm = new RetractArm(arm);
+		openClaw = new OpenClaw(claw);
+		raiseArm = new RaiseArm(winch);
 
 		// Set any subsystem Default commands.
 
@@ -220,6 +241,12 @@ public class RobotContainer
 				() -> driverPad.getLeftX(),	// Strafe
 				driverPad.getRightXDS(),	// Rotation
 				driverPad));
+
+		winch.setDefaultCommand(new DriveWinch(winch, () -> utilityPad.getRightY()));
+
+		claw.setDefaultCommand(new DriveClaw(claw, () -> utilityPad.getRightX()));
+
+		arm.setDefaultCommand(new DriveArm(arm, () -> utilityPad.getLeftY()));
 
 		// Start the compressor, PDP and camera feed monitoring Tasks.
 
@@ -335,7 +362,7 @@ public class RobotContainer
 		// So any function that operates valves will trigger the watchdogs. Again, the watchdog 
 		// notifications are only a warning (though too much delay on main thread can effect robot
 		// operation) they can fill the Riolog to the point it is not useful.
-		// Note: the threaded command can only execute a runnable (function on a class) not a Command.
+		// Note: the threaded command can only execute a run(((((nable (function on a class) not a Command.
 		
 		// Toggle pickup deployment
 		//new Trigger(() -> utilityPad.getLeftBumper())
@@ -343,6 +370,17 @@ public class RobotContainer
 			//.onTrue(new InstantCommand(pickup::toggleDeploy, pickup));
 		//	.onTrue(new NotifierCommand(pickup::toggleDeploy, 0.0, "DeployPickup", pickup));
 
+		// Start or stop (if already in progress), the command to drop arm to low position.
+		new Trigger(() -> utilityPad.getPOVAngle(180)).toggleOnTrue(dropArm);
+
+		// Start or stop (if already in progress), the command to retract arm to inward position.
+		new Trigger(() -> utilityPad.getPOVAngle(270)).toggleOnTrue(retractArm);
+
+		// Start or stop (if already in progress), the command to fully open the claw.
+		new Trigger(() -> utilityPad.getRightBumper()).toggleOnTrue(openClaw);
+
+		// Start or stop (if already in progress), the command to raise the arm to target position.
+		new Trigger(() -> utilityPad.getPOVAngle(0)).toggleOnTrue(raiseArm);
 	}
 
 	/**
@@ -355,6 +393,7 @@ public class RobotContainer
 	{
 		AutoProgram		program = AutoProgram.NoProgram;
 		Pose2d			startingPose = DEFAULT_STARTING_POSE;
+		Integer			startingPoseIndex;
 		Command			autoCommand = null;
 		
 		Util.consoleLog();
@@ -363,7 +402,17 @@ public class RobotContainer
 		{
 			program = autoChooser.getSelected();
 
-			startingPose = startingPoseChooser.getSelected();
+			startingPoseIndex = startingPoseChooser.getSelected();
+
+			startingPose = STARTING_POSES[startingPoseIndex];
+
+			// Adjust Y position for Red side of the field. Hopefully this works.
+			
+			if (alliance == Alliance.Red) startingPose = new Pose2d(startingPose.getX(), 8.014 - startingPose.getY(), 
+																	startingPose.getRotation());
+
+			// startingPose = new Pose2d(16.542 - startingPose.getX(), 8.014 - startingPose.getY(), 
+			// startingPose.getRotation());
 		}
 		catch (Exception e)	{ Util.logException(e); }
 		
@@ -413,12 +462,19 @@ public class RobotContainer
 	private void setStartingPoses()
 	{
 		Util.consoleLog();
-		
-		startingPoseChooser = new SendableChooser<Pose2d>();
+
+		startingPoseChooser = new SendableChooser<Integer>();
 		
 		SendableRegistry.add(startingPoseChooser, "Start Position");
-		startingPoseChooser.setDefaultOption("Default", DEFAULT_STARTING_POSE);
-		//startingPoseChooser.addOption("Blue 1", BLUE_1);		
+		startingPoseChooser.setDefaultOption("1", 0);
+
+		for (Integer i = 2; i < 10; i++) startingPoseChooser.addOption(i.toString(), i - 1);		
+		
+		// startingPoseChooser = new SendableChooser<Pose2d>();
+		
+		// SendableRegistry.add(startingPoseChooser, "Start Position");
+		// startingPoseChooser.setDefaultOption("Default", DEFAULT_STARTING_POSE);
+		// //startingPoseChooser.addOption("Blue 1", BLUE_1);		
 				
 		SmartDashboard.putData(startingPoseChooser);
 	}

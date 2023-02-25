@@ -18,6 +18,6 @@ Operates the robot "Prometheus" for FRC game "Charged Up".
 ****************************************************************************************************************
 Version 23.0
 
-*   Base code for 2023 robot. Requires RobotLib v4.2.0 or later.
+*   Base code for 2023 robot. Requires RobotLib v4.3.1 or later.
 
-R. Corn, January 2023
+R. Corn, February 2023
